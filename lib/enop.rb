@@ -8,7 +8,7 @@ require 'pp'
 
 require 'forwardable'
 require 'dbutil_base'
-require 'dbutil_ennblist'
+require 'dbutil_enop'
 
 module Enop
   class Enop
