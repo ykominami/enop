@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{evernote operation.}
   spec.description   = %q{evernote operation.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.homepage      = ""
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
   # delete this section to allow pushing this gem to any host.
