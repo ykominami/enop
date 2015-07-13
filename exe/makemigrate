@@ -1,0 +1,50 @@
+#!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
+
+require 'dbinit'
+require 'migrate'
+require 'enop'
+
+data_ary = [
+  {
+    :flist => %W!noitem!,
+    :classname => "Countdatetime",
+    :classname_downcase => "countdatetime",
+    :items => [
+              ["countdatetime" , "datetime", "false"],
+            ],
+    :plural => "countdatetimes"
+  },
+
+  {
+    :flist => %W!noitem!,
+    :classname => "Evnb",
+    :classname_downcase => "evnb",
+    :items => [
+              ["time_id" , "integer", "false"],
+              ["ennb_id" , "integer", "false"],
+            ],
+    :plural => "evnbs"
+  },
+
+  {
+    :flist => %W!base invalid current!,
+    :classname => "Ennblist",
+    :classname_downcase => "ennblist",
+
+    :items => [
+              ["stack" , "string", "false"],
+              ["notebook" , "string", "false"],
+              ["counte" , "integer", "false"],
+              ["tag_count" , "integer", "false"],
+             ],
+    :plural => "ennblists"
+  },
+]
+
+forced = true
+mig = Arxutils::Migrate.new(Arxutils::DB_DIR, Arxutils::MIGRATE_DIR  , Arxutils::CONFIG_DIR , Arxutils::DBCONFIG, Arxutils::DATABASELOG , forced )
+data_ary.reduce(0) do |next_num , x| 
+  mig.make( next_num , x )
+end
+mig.migrate
