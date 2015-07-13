@@ -35,7 +35,7 @@ data_ary = [
     :items => [
               ["stack" , "string", "false"],
               ["notebook" , "string", "false"],
-              ["counte" , "integer", "false"],
+              ["count" , "integer", "false"],
               ["tag_count" , "integer", "false"],
              ],
     :plural => "ennblists"
