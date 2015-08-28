@@ -42,9 +42,14 @@ data_ary = [
   },
 ]
 
+dbconfig = Arxutils::Dbutil::DBCONFIG_MYSQL
+dbconfig = Arxutils::Dbutil::DBCONFIG_SQLITE3
+
 forced = true
-mig = Arxutils::Migrate.new(Arxutils::DB_DIR, Arxutils::MIGRATE_DIR  , Arxutils::CONFIG_DIR , Arxutils::DBCONFIG, Arxutils::DATABASELOG , forced )
-data_ary.reduce(0) do |next_num , x| 
-  mig.make( next_num , x )
-end
-mig.migrate
+Arxutils::Migrate.migrate(
+                          data_ary,
+                          0,
+                          dbconfig,
+                          forced
+                          )
+

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+require 'active_record'
+require 'enop/dbutil/enopmgr'
 require 'forwardable'
 require 'pp'
 
@@ -20,21 +22,9 @@ module Enop
     class Countdatetime < ActiveRecord::Base
     end
 
-    class DbMgr
-      extend Forwardable
-      
-      def_delegator( :@ennblistmgr , :add, :add)
-
-      def initialize( register_time )
-        @ennblistmgr = EnopMgr.new( register_time )
-      end
-
-    end
-    
     class EnopMgr
-      
       extend Forwardable
-
+      
       def initialize(register_time)
         @register_time = register_time
         @ct = Countdatetime.create( countdatetime: @register_time )
@@ -79,7 +69,7 @@ module Enop
         end
         ennblist
       end
-
+      
       def post_process( dir_id )
         h_ids = Currentennblist.pluck(:org_id)
         t_ids = @hs_by_id.keys
@@ -92,4 +82,4 @@ module Enop
       end
     end
   end
-end
+  
