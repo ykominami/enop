@@ -1,8 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 
-require 'dbinit'
-require 'migrate'
+require 'arxutils'
 require 'enop'
 
 data_ary = [
