@@ -13,7 +13,7 @@ module Enop
     
     def_delegator( :@dbmgr , :add , :db_add)
 
-    def initialize( authToken , kind, hs /* db_dir , migrate_dir , config_dir, dbconfig , log_fname , */)
+    def initialize( authToken , kind, hs )
 
       @stack_hs = {}
       @nbinfos = {}
@@ -24,12 +24,6 @@ module Enop
       @dbmgr = Arxutils::Store.init(kind , hs ){ | register_time |
         Dbutil::DbMgr.new( register_time )
       }
-
-      /*
-      register_time = Arxutils::Dbutil::DbMgr.init( db_dir , migrate_dir , config_dir, dbconfig , log_fname )
-
-      @dbmgr = Dbutil::DbMgr.new( register_time )
-*/
 
       evernoteHost = "www.evernote.com"
       userStoreUrl = "https://#{evernoteHost}/edam/user"

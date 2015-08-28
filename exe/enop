@@ -1,9 +1,25 @@
 #!/usr/bin/env ruby
 
+require 'arxutils'
 require "enop"
 
-authToken = "S=s18:U=1f38cb:E=15110796cd9:C=149b8c83d38:P=1cd:A=en-devtoken:V=2:H=970049a2b990ad5e0f58252a626539b0"
+dbconfig = Arxutils::Dbutil::DBCONFIG_MYSQL
+dbconfig = Arxutils::Dbutil::DBCONFIG_SQLITE3
 
-enop = Enop::Enop.new(Arxutils::DB_DIR, Arxutils::MIGRATE_DIR , Arxutils::CONFIG_DIR , Arxutils::DBCONFIG , Arxutils::DATABASELOG , authToken)
+token = ARGV[0]
+hs = {
+  "db_dir" => Arxutils::Dbutil::DB_DIR,
+  "migrate_dir" => Arxutils::Dbutil::MIGRATE_DIR,
+  "config_dir" => Arxutils::Dbutil::CONFIG_DIR,
+  "dbconfig" => dbconfig,
+  "log_fname" => Arxutils::Dbutil::DATABASELOG,
+}
+
+
+enop = Enop::Enop.new(
+                      token,
+                      :db,
+                      hs
+                      )
 enop.connect
 enop.list_notebooks
