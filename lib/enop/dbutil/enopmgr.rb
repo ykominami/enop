@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 require 'active_record'
-require 'enop/dbutil/enopmgr'
 require 'forwardable'
 require 'pp'
 
@@ -82,4 +81,6 @@ module Enop
       end
     end
   end
-  
+end
+
+
