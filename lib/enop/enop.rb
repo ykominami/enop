@@ -4,7 +4,6 @@ require 'csv'
 require 'pp'
 
 require 'forwardable'
-require ''
 
 module Enop
   class Enop
