@@ -4,8 +4,7 @@ require 'csv'
 require 'pp'
 
 require 'forwardable'
-require 'dbutil_base'
-require 'dbutil_enop'
+require ''
 
 module Enop
   class Enop
