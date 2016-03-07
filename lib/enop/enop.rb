@@ -2,17 +2,20 @@
 require 'evernote-thrift'
 require 'csv'
 require 'pp'
-
+require 'openssl'
 require 'forwardable'
 
 module Enop
   class Enop
     extend Forwardable
     
-    def_delegator( :@dbmgr , :add , :db_add)
+    def_delegator( :@dbmgr , :add , :db_add )
 
-    def initialize( authToken , kind, hs )
-
+    def initialize( authToken , kind , hs , userStoreUrl = nil )
+      # SSL認証を行わないように変更
+      OpenSSL::SSL.module_eval{ remove_const(:VERIFY_PEER) }
+      OpenSSL::SSL.const_set( :VERIFY_PEER, OpenSSL::SSL::VERIFY_NONE )
+      
       @stack_hs = {}
       @nbinfos = {}
       @notebookinfo = Struct.new("NotebookInfo", :name, :stack, :defaultNotebook, :count , :tags )
@@ -24,18 +27,20 @@ module Enop
       }
 
       evernoteHost = "www.evernote.com"
-      userStoreUrl = "https://#{evernoteHost}/edam/user"
+      userStoreUrl = "https://#{evernoteHost}/edam/user" unless userStoreUrl
+        userStoreUrl = "https://www.evernote.com/shard/s18/notestore"
+#      userStoreUrl = 
       userStoreTransport = Thrift::HTTPClientTransport.new(userStoreUrl)
       userStoreProtocol = Thrift::BinaryProtocol.new(userStoreTransport)
       @userStore = Evernote::EDAM::UserStore::UserStore::Client.new(userStoreProtocol)
-
+      # Invalid method name : 'checkVersion' が返されるので、とりあえずコメント化
+=begin
       versionOK = @userStore.checkVersion("Evernote EDAMTest (Ruby)",
                                           Evernote::EDAM::UserStore::EDAM_VERSION_MAJOR,
                                           Evernote::EDAM::UserStore::EDAM_VERSION_MINOR)
       puts "Is my Evernote API version up to date?  #{versionOK}"
-      puts
       exit(1) unless versionOK
-
+=end
       set_output_dest( get_output_filename_base )
     end
 
@@ -65,7 +70,6 @@ module Enop
       # In that case, you don't need to make this call.
       #noteStoreUrl = userStore.getNoteStoreUrl(authToken)
       noteStoreUrl = "https://www.evernote.com/shard/s18/notestore"
-      
       noteStoreTransport = Thrift::HTTPClientTransport.new(noteStoreUrl)
       noteStoreProtocol = Thrift::BinaryProtocol.new(noteStoreTransport)
       @noteStore = Evernote::EDAM::NoteStore::NoteStore::Client.new(noteStoreProtocol)
@@ -77,8 +81,18 @@ module Enop
 
       begin
         notebooks = @noteStore.listNotebooks(@authToken)
+      rescue Evernote::EDAM::Error::EDAMUserException => ex
+        parameter = ex.parameter
+        errorCode = ex.errorCode
+        errorText = Evernote::EDAM::Error::EDAMErrorCode::VALUE_MAP[errorCode]
+
+        puts "Authentication failed (parameter: #{parameter} errorCode: #{errorText})"
+
+        exit(1)
       rescue => ex
+        puts "@authToken=#{@authToken}"
         puts "Can't call listNotebooks"
+        p ex
         exit
       end
 
