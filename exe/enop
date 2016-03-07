@@ -7,6 +7,7 @@ dbconfig = Arxutils::Dbutil::DBCONFIG_MYSQL
 dbconfig = Arxutils::Dbutil::DBCONFIG_SQLITE3
 
 token = ARGV[0]
+url = ARGV[1] if ARGV.size > 10
 hs = {
   "db_dir" => Arxutils::Dbutil::DB_DIR,
   "migrate_dir" => Arxutils::Dbutil::MIGRATE_DIR,
@@ -19,7 +20,8 @@ hs = {
 enop = Enop::Enop.new(
                       token,
                       :db,
-                      hs
+                      hs,
+                      url
                       )
 enop.connect
 enop.list_notebooks
