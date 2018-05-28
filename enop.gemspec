@@ -9,9 +9,10 @@ Gem::Specification.new do |spec|
   spec.authors       = ["yasuo kominami"]
   spec.email         = ["ykominami@gmail.com"]
 
-  spec.summary       = %q{evernote operation.}
-  spec.description   = %q{evernote operation.}
+  spec.summary       = %q{abc.}
+  spec.description   = %q{def.}
   spec.homepage      = ""
+  spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
   # delete this section to allow pushing this gem to any host.
@@ -38,7 +39,9 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency "arxutils"
 
-  spec.add_development_dependency "bundler", "~> 1.10"
-  spec.add_development_dependency "rake", "~> 10.0"
+#  spec.add_development_dependency "bundler", "~> 1.10"
+  spec.add_development_dependency "bundler"
+#  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
 end
