@@ -15,3 +15,5 @@
 /db/
 /.*#
 /.gitignore
+/OLD-DATA
+/*~
