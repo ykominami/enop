@@ -17,3 +17,5 @@
 /.gitignore
 /OLD-DATA
 /*~
+/archive
+/vendor
