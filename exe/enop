@@ -8,11 +8,16 @@ dbconfig = Arxutils::Dbutil::DBCONFIG_SQLITE3
 
 token = ARGV[0]
 url = ARGV[1] if ARGV.size > 10
+env = ENV['ENV']
+#env ||= "development"
+env ||= "production"
+
 hs = {
   "db_dir" => Arxutils::Dbutil::DB_DIR,
   "migrate_dir" => Arxutils::Dbutil::MIGRATE_DIR,
   "config_dir" => Arxutils::Dbutil::CONFIG_DIR,
   "dbconfig" => dbconfig,
+  "env" => env,
   "log_fname" => Arxutils::Dbutil::DATABASELOG,
 }
 
