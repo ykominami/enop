@@ -56,7 +56,11 @@ module Enop
               end
               hsx
             }
-            current_ennblist.update(value_hs) if value_hs.size > 0
+            if value_hs.size > 0
+              if value_hs.all? { |item| item[1] != nil }
+                current_ennblist.update(value_hs)
+              end
+            end
           end
         else
           # ignore this case.

@@ -124,7 +124,9 @@ module Enop
           # CSVファイルへ追加（自動的に出力）
           register_notebook( nbinfo.stack , nbinfo )
           # dbへの登録
-          db_add(  nbinfo.stack , nbinfo.name , nbinfo.count , nbinfo.tags.size )
+          count = nbinfo.count
+          count ||= 0
+          db_add(  nbinfo.stack , nbinfo.name , count , nbinfo.tags.size )
 
           #  p notebook
           memo[:defaultNotebook] = nbinfo if nbinfo.defaultNotebook
