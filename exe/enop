@@ -4,7 +4,7 @@ require 'arxutils'
 require "enop"
 
 dbconfig = Arxutils::Dbutil::DBCONFIG_MYSQL
-dbconfig = Arxutils::Dbutil::DBCONFIG_SQLITE3
+#dbconfig = Arxutils::Dbutil::DBCONFIG_SQLITE3
 
 token = ARGV[0]
 url = ARGV[1] if ARGV.size > 10
