@@ -27,7 +27,7 @@ data_ary = [
   },
 
   {
-    :flist => %W!base invalid current!,
+    :flist => %W!noitem invalid current!,
     :classname => "Ennblist",
     :classname_downcase => "ennblist",
 
@@ -36,19 +36,30 @@ data_ary = [
               ["notebook" , "string", "false"],
               ["count" , "integer", "false"],
               ["tag_count" , "integer", "false"],
+              ["start_datetime" , "datetime", "false"],
              ],
     :plural => "ennblists"
   },
 ]
 
 dbconfig = Arxutils::Dbutil::DBCONFIG_MYSQL
-dbconfig = Arxutils::Dbutil::DBCONFIG_SQLITE3
+#dbconfig = Arxutils::Dbutil::DBCONFIG_SQLITE3
+
+token = ARGV[0]
+url = ARGV[1] if ARGV.size > 10
+env = ENV['ENV']
+#env ||= "development"
+env ||= "production"
 
 forced = true
 Arxutils::Migrate.migrate(
+                          Arxutils::Dbutil::DB_DIR,
+                          Arxutils::Dbutil::CONFIG_DIR,
+                          Arxutils::Dbutil::DATABASELOG,
+                          Arxutils::Dbutil::MIGRATE_DIR,
+                          env,
                           data_ary,
-                          0,
                           dbconfig,
-                          forced
+                          forced,
                           )
 
