@@ -3,8 +3,9 @@
 
 require 'arxutils'
 require 'enop'
+require 'simpleoptparse'
 
-data_ary = [
+db_scheme_ary = [
   {
     :flist => %W!noitem!,
     :classname => "Countdatetime",
@@ -42,24 +43,34 @@ data_ary = [
   },
 ]
 
-dbconfig = Arxutils::Dbutil::DBCONFIG_MYSQL
-#dbconfig = Arxutils::Dbutil::DBCONFIG_SQLITE3
+opts = { db_dir: Arxutils::Dbutil::DB_DIR }
+banner = "Usage: bundle exec ruby exe/makemigrate [--makeconfig|--remigrate|--mysql|--sqlite3]"
 
-token = ARGV[0]
-url = ARGV[1] if ARGV.size > 10
+Simpleoptparse::Simpleoptparse.parse( ARGV , opts , banner , Enop::VERSION , nil ){ |parser|
+  parser.on('-c','--makeconfig'  ) { |x| opts["makeconfig"] = true }
+  parser.on('-r','--remigrate'  ) { |x| opts["remigrate"] = true }
+  parser.on('--mysql'  ) { |x| opts["dbconfig"] = Arxutils::Dbutil::DBCONFIG_MYSQL }
+  parser.on('--sqlite3'  ) { |x| opts["dbconfig"] = Arxutils::Dbutil::DBCONFIG_SQLITE3 }
+}
+opts["makeconfig"] = !opts["makeconfig"].nil?
+opts["remigrate"] = !opts["remigrate"].nil?
+
+opts["dbconfig"] = Arxutils::Dbutil::DBCONFIG_SQLITE3 unless opts["dbconfig"]
+
 env = ENV['ENV']
 #env ||= "development"
 env ||= "production"
+p opts
+exit
 
-forced = true
 Arxutils::Migrate.migrate(
                           Arxutils::Dbutil::DB_DIR,
                           Arxutils::Dbutil::CONFIG_DIR,
                           Arxutils::Dbutil::DATABASELOG,
                           Arxutils::Dbutil::MIGRATE_DIR,
                           env,
-                          data_ary,
-                          dbconfig,
-                          forced,
+                          db_scheme_ary,
+                          opts["dbconfig"],
+                          opts,
                           )
 

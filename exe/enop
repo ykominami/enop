@@ -1,32 +1,48 @@
 #!/usr/bin/env ruby
 
 require 'arxutils'
-require "enop"
+require 'enop'
+require 'simpleoptparse'
 
-dbconfig = Arxutils::Dbutil::DBCONFIG_MYSQL
-#dbconfig = Arxutils::Dbutil::DBCONFIG_SQLITE3
-
-token = ARGV[0]
-url = ARGV[1] if ARGV.size > 10
 env = ENV['ENV']
 #env ||= "development"
 env ||= "production"
+
+opts = { db_dir: Arxutils::Dbutil::DB_DIR }
+banner = "Usage: bundle exec ruby exe/enope token url [--mysql|--sqlite3]"
+
+if ARGV.size > 1
+  token = ARGV.shift 
+  url = ARGV.shift
+else
+  puts banner
+  exit 10
+end
+
+# wop = Simpleoptparse::Simpleoptparse.create( ARGV , opts , banner , Arxutils::
+#p Simpleoptparse::Simpleoptparse.class
+Simpleoptparse::Simpleoptparse.parse( ARGV , opts , banner , Enop::VERSION , nil ){ |parser|
+    parser.on('--mysql'  ) { |x| opts["dbconfig"] = Arxutils::Dbutil::DBCONFIG_MYSQL }
+    parser.on('--sqlite3'  ) { |x| opts["dbconfig"] = Arxutils::Dbutil::DBCONFIG_SQLITE3 }
+}
+
+opts["dbconfig"] = Arxutils::Dbutil::DBCONFIG_SQLITE3 unless opts["dbconfig"]
 
 hs = {
   "db_dir" => Arxutils::Dbutil::DB_DIR,
   "migrate_dir" => Arxutils::Dbutil::MIGRATE_DIR,
   "config_dir" => Arxutils::Dbutil::CONFIG_DIR,
-  "dbconfig" => dbconfig,
+  "dbconfig" => opts["dbconfig"],
   "env" => env,
   "log_fname" => Arxutils::Dbutil::DATABASELOG,
 }
-
 
 enop = Enop::Enop.new(
                       token,
                       :db,
                       hs,
-                      url
+                      opts,
+                      url,
                       )
 enop.connect
 enop.list_notebooks
