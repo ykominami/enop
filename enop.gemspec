@@ -29,21 +29,12 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency "evernote_oauth"
   spec.add_runtime_dependency "activerecord" , "~> 4.2"
-#  spec.add_runtime_dependency "sqlite3"
+  spec.add_runtime_dependency "sqlite3"
   spec.add_runtime_dependency "mysql2" , "~> 0.4.1"
-#  spec.add_runtime_dependency "sinatra"
-#  spec.add_runtime_dependency "sinatra-contrib"
-#  spec.add_runtime_dependency "backport" , ">= 2.0"
-#  spec.add_runtime_dependency "multi_json" , ">= 1.11.1"
-#  spec.add_runtime_dependency "rack"
-#  spec.add_runtime_dependency "rack-test"
 
-   spec.add_runtime_dependency "arxutils", "~> 0.1.10"
-#  spec.add_runtime_dependency "arxutils"
+  spec.add_runtime_dependency "arxutils", "~> 0.1.10"
 
-#  spec.add_development_dependency "bundler", "~> 1.10"
   spec.add_development_dependency "bundler"
-#  spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
 end
