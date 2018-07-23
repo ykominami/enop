@@ -11,7 +11,7 @@ module Enop
     
     def_delegator( :@dbmgr , :add , :db_add )
 
-    def initialize( authToken , kind , hs , userStoreUrl = nil )
+    def initialize( authToken , kind , hs , opts, userStoreUrl = nil )
       # SSL認証を行わないように変更
       OpenSSL::SSL.module_eval{ remove_const(:VERIFY_PEER) }
       OpenSSL::SSL.const_set( :VERIFY_PEER, OpenSSL::SSL::VERIFY_NONE )
@@ -22,7 +22,7 @@ module Enop
 
       @authToken = authToken
 
-      @dbmgr = Arxutils::Store.init(kind , hs ){ | register_time |
+      @dbmgr = Arxutils::Store.init(kind , hs , opts){ | register_time |
         Dbutil::DbMgr.new( register_time )
       }
 
