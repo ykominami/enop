@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["yasuo kominami"]
   spec.email         = ["ykominami@gmail.com"]
 
-  spec.summary       = %q{abc.}
-  spec.description   = %q{def.}
+  spec.summary       = %q{utility functions for Evernote API.}
+  spec.description   = %q{utility functions for Evernote API.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
@@ -31,7 +31,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "activerecord" , "~> 4.2"
   spec.add_runtime_dependency "sqlite3"
   spec.add_runtime_dependency "mysql2" , "~> 0.4.1"
-
   spec.add_runtime_dependency "arxutils", "~> 0.1.10"
 
   spec.add_development_dependency "bundler"
