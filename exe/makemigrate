@@ -60,8 +60,6 @@ opts["dbconfig"] = Arxutils::Dbutil::DBCONFIG_SQLITE3 unless opts["dbconfig"]
 env = ENV['ENV']
 #env ||= "development"
 env ||= "production"
-p opts
-exit
 
 Arxutils::Migrate.migrate(
                           Arxutils::Dbutil::DB_DIR,
