@@ -19,3 +19,8 @@
 /*~
 /archive
 /vendor
+output/
+x.csv
+/lib/enop/dbutil/dbrelation.rb
+/.vscode
+/a.rb
