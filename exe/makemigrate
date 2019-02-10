@@ -43,7 +43,14 @@ db_scheme_ary = [
   },
 ]
 
-opts = { db_dir: Arxutils::Dbutil::DB_DIR }
+opts = { 
+  db_dir: Arxutils::Dbutil::DB_DIR , 
+  relation: { 
+    module: ["Enop" , "Dbutil"], 
+    filename: "dbrelation.rb", 
+    dir: "lib/enop/dbutil"
+  } 
+}
 banner = "Usage: bundle exec ruby exe/makemigrate [--makeconfig|--remigrate|--mysql|--sqlite3]"
 
 Simpleoptparse::Simpleoptparse.parse( ARGV , opts , banner , Enop::VERSION , nil ){ |parser|
