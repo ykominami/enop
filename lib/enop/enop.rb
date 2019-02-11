@@ -8,27 +8,29 @@ require 'forwardable'
 module Enop
   class Enop
     extend Forwardable
-    
+
     def_delegator( :@dbmgr , :add , :db_add )
 
     def initialize( authToken , kind , hs , opts, userStoreUrl = nil )
       # SSL認証を行わないように変更
       OpenSSL::SSL.module_eval{ remove_const(:VERIFY_PEER) }
       OpenSSL::SSL.const_set( :VERIFY_PEER, OpenSSL::SSL::VERIFY_NONE )
-      
+
       @stack_hs = {}
       @nbinfos = {}
       @notebookinfo = Struct.new("NotebookInfo", :name, :stack, :defaultNotebook, :count , :tags )
 
       @authToken = authToken
 
-      @dbmgr = Arxutils::Store.init(kind , hs , opts){ | register_time |
-        Dbutil::DbMgr.new( register_time )
-      }
+      register_time = Arxutils::Dbutil::DbMgr.init( hs["db_dir"], hs["migrate_dir"] , hs["config_dir"], hs["dbconfig"] , hs["env"] , hs["log_fname"] , opts )
 
+      @dbmgr = ::Enop::Dbutil::EnopMgr.new( register_time )
+      puts "@dbmgr=#{@dbmgr}"
+      
+      
       evernoteHost = "www.evernote.com"
-      userStoreUrl = "https://#{evernoteHost}/edam/user" unless userStoreUrl
-        userStoreUrl = "https://www.evernote.com/shard/s18/notestore"
+#      userStoreUrl = "https://#{evernoteHost}/edam/user" unless userStoreUrl
+      userStoreUrl = "https://#{evernoteHost}/shard/s18/notestore"
 #      userStoreUrl = 
       userStoreTransport = Thrift::HTTPClientTransport.new(userStoreUrl)
       userStoreProtocol = Thrift::BinaryProtocol.new(userStoreTransport)
@@ -41,15 +43,16 @@ module Enop
       puts "Is my Evernote API version up to date?  #{versionOK}"
       exit(1) unless versionOK
 =end
-      set_output_dest( get_output_filename_base )
+      set_output_dest( hs["output_dir"] , get_output_filename_base )
     end
 
-    def set_output_dest( fname )
-      if fname
-        fname_txt = fname + ".txt"
-        fname_csv = fname + ".csv"
-        @output = File.open( fname_txt , "w" , { :encoding => 'UTF-8' } )
-        @output_csv = CSV.open( fname_csv , "w" , { :encoding => 'UTF-8' } )
+    def set_output_dest( parent_dir , fname_base )
+      if fname_base
+		    outfname = File.join( parent_dir , fname_base )
+        outfname_txt = outfname + ".txt"
+        outfname_csv = outfname + ".csv"
+        @output = File.open( outfname_txt , "w" , { :encoding => 'UTF-8' } )
+        @output_csv = CSV.open( outfname_csv , "w" , { :encoding => 'UTF-8' } )
       else
         @output = STDOUT
       end
@@ -75,10 +78,7 @@ module Enop
       @noteStore = Evernote::EDAM::NoteStore::NoteStore::Client.new(noteStoreProtocol)
     end
 
-    def list_notebooks
-      # List all of the notebooks in the user's account
-      filter = Evernote::EDAM::NoteStore::NoteFilter.new
-
+    def get_notebooks
       begin
         notebooks = @noteStore.listNotebooks(@authToken)
       rescue Evernote::EDAM::Error::EDAMUserException => ex
@@ -97,19 +97,70 @@ module Enop
       end
 
       puts "Found #{notebooks.size} notebooks:"
-      memo = notebooks.inject({:defaultNotebook => nil , :nbinfo => []}) do |memo , notebook|
+
+      notebooks
+    end
+
+    def get_note_count( notebookguid , filter = nil )
+      filter = Evernote::EDAM::NoteStore::NoteFilter.new unless filter
+      filter.notebookGuid = notebookguid
+      ret = nil
+      begin
+        ret = @noteStore.findNoteCounts(@authToken , filter , false )
+      rescue => ex
+        puts "Can't call findNoteCounts with #{notebookguid}"
+      end
+
+      ret
+    end
+
+    def get_url_from_notebook( name )
+      @notebooks = get_notebooks unless @notebooks
+
+      filter = Evernote::EDAM::NoteStore::NoteFilter.new
+
+      notebook = @notebooks.find{ |x| x.name == name }
+      filter.notebookGuid = notebook.guid
+      ret = get_note_count( notebook.guid , filter )
+      notebookCounts = 0
+      if ret
+        if ret.notebookCounts
+          notebookCounts = ret.notebookCounts[notebook.guid]
+        end
+      end
+      filter.ascending = false
+      spec = Evernote::EDAM::NoteStore::NotesMetadataResultSpec.new
+      spec.includeTitle = true
+      spec.includeAttributes = true
+      array_of_array = []
+      count_unit = 100
+      count = 0
+      count.step(notebookCounts , count_unit) {|cnt|
+        ourNoteList = @noteStore.findNotesMetadata(@authToken, filter, cnt, count_unit, spec)
+        array_of_array << ourNoteList.notes.map{ |x| [x.title , x.attributes.sourceURL] }
+      }
+=begin
+      while count < notebookCounts
+        ourNoteList = @noteStore.findNotesMetadata(@authToken, filter, count, count_unit, spec)
+        ourNoteList.notes.map{ |x| url_array << [x.title , .attributes.sourceURL] }
+#        ourNoteList.notes.map{ |x| p x }
+        count += count_unit
+      end
+=end
+      array_of_array.flatten(1)
+    end
+
+    def list_notebooks
+      # List all of the notebooks in the user's account
+
+      @notebooks = get_notebooks unless @notebooks
+
+      filter = Evernote::EDAM::NoteStore::NoteFilter.new
+
+      memo = @notebooks.inject({:defaultNotebook => nil , :nbinfo => []}) do |memo , notebook|
         notebook_name = ( notebook.name == nil ? "" : notebook.name )
         stack_name = ( notebook.stack == nil ? "" : notebook.stack )
-
-        filter.notebookGuid = notebook.guid
-
-        ret = nil
-        begin
-          ret = @noteStore.findNoteCounts(@authToken , filter , false )
-        rescue => ex
-          puts "Can't call findNoteCounts with #{notebook_name}"
-        end
-
+        ret = get_note_count( notebook.guid , filter )
         if ret
           if ret.notebookCounts
             notebookCounts = ret.notebookCounts[notebook.guid]
