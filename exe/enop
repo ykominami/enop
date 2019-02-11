@@ -35,14 +35,17 @@ hs = {
   "dbconfig" => opts["dbconfig"],
   "env" => env,
   "log_fname" => Arxutils::Dbutil::DATABASELOG,
+  :csv_fname => "x.csv",
+  "output_dir" => "output"
 }
 
 enop = Enop::Enop.new(
                       token,
-                      :db,
                       hs,
                       opts,
                       url,
                       )
 enop.connect
 enop.list_notebooks
+#enop.get_url_from_notebook( '0-0-fpga' ).map{|x| puts "#{x[0]}\t#{x[1]}" }
+

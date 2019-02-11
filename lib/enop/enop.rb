@@ -7,11 +7,8 @@ require 'forwardable'
 
 module Enop
   class Enop
-    extend Forwardable
 
-    def_delegator( :@dbmgr , :add , :db_add )
-
-    def initialize( authToken , kind , hs , opts, userStoreUrl = nil )
+    def initialize( authToken , hs , opts, userStoreUrl = nil )
       # SSL認証を行わないように変更
       OpenSSL::SSL.module_eval{ remove_const(:VERIFY_PEER) }
       OpenSSL::SSL.const_set( :VERIFY_PEER, OpenSSL::SSL::VERIFY_NONE )
@@ -177,7 +174,7 @@ module Enop
           # dbへの登録
           count = nbinfo.count
           count ||= 0
-          db_add(  nbinfo.stack , nbinfo.name , count , nbinfo.tags.size )
+          @dbmgr.add(  nbinfo.stack , nbinfo.name , count , nbinfo.tags.size )
 
           #  p notebook
           memo[:defaultNotebook] = nbinfo if nbinfo.defaultNotebook
