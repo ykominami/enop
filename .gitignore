@@ -24,3 +24,4 @@ x.csv
 /lib/enop/dbutil/dbrelation.rb
 /.vscode
 /a.rb
+/lib/evernote_config.rb
