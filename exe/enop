@@ -19,8 +19,6 @@ else
   exit 10
 end
 
-# wop = Simpleoptparse::Simpleoptparse.create( ARGV , opts , banner , Arxutils::
-#p Simpleoptparse::Simpleoptparse.class
 Simpleoptparse::Simpleoptparse.parse( ARGV , opts , banner , Enop::VERSION , nil ){ |parser|
     parser.on('--mysql'  ) { |x| opts["dbconfig"] = Arxutils::Dbutil::DBCONFIG_MYSQL }
     parser.on('--sqlite3'  ) { |x| opts["dbconfig"] = Arxutils::Dbutil::DBCONFIG_SQLITE3 }
@@ -47,5 +45,3 @@ enop = Enop::Enop.new(
                       )
 enop.connect
 enop.list_notebooks
-#enop.get_url_from_notebook( '0-0-fpga' ).map{|x| puts "#{x[0]}\t#{x[1]}" }
-
