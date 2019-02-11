@@ -6,63 +6,67 @@ require 'openssl'
 require 'forwardable'
 
 module Enop
+  # Evernote操作クラス
   class Enop
-
+    # 初期化
     def initialize( authToken , hs , opts, userStoreUrl = nil )
       # SSL認証を行わないように変更
       OpenSSL::SSL.module_eval{ remove_const(:VERIFY_PEER) }
       OpenSSL::SSL.const_set( :VERIFY_PEER, OpenSSL::SSL::VERIFY_NONE )
 
+      # Evernoteのノートブックスタックの配列
       @stack_hs = {}
+      # ノートブック情報の配列
       @nbinfos = {}
+      # ノートブック情報のStruct
       @notebookinfo = Struct.new("NotebookInfo", :name, :stack, :defaultNotebook, :count , :tags )
 
+      # 認証トークン
       @authToken = authToken
 
       register_time = Arxutils::Dbutil::DbMgr.init( hs["db_dir"], hs["migrate_dir"] , hs["config_dir"], hs["dbconfig"] , hs["env"] , hs["log_fname"] , opts )
 
+      # 保存用DBマネージャ
       @dbmgr = ::Enop::Dbutil::EnopMgr.new( register_time )
       puts "@dbmgr=#{@dbmgr}"
-      
-      
+
+
       evernoteHost = "www.evernote.com"
-#      userStoreUrl = "https://#{evernoteHost}/edam/user" unless userStoreUrl
       userStoreUrl = "https://#{evernoteHost}/shard/s18/notestore"
-#      userStoreUrl = 
       userStoreTransport = Thrift::HTTPClientTransport.new(userStoreUrl)
       userStoreProtocol = Thrift::BinaryProtocol.new(userStoreTransport)
+      # Evernoteユーザストア
       @userStore = Evernote::EDAM::UserStore::UserStore::Client.new(userStoreProtocol)
       # Invalid method name : 'checkVersion' が返されるので、とりあえずコメント化
-=begin
-      versionOK = @userStore.checkVersion("Evernote EDAMTest (Ruby)",
-                                          Evernote::EDAM::UserStore::EDAM_VERSION_MAJOR,
-                                          Evernote::EDAM::UserStore::EDAM_VERSION_MINOR)
-      puts "Is my Evernote API version up to date?  #{versionOK}"
-      exit(1) unless versionOK
-=end
       set_output_dest( hs["output_dir"] , get_output_filename_base )
     end
 
+    # 出力先設定
     def set_output_dest( parent_dir , fname_base )
       if fname_base
 		    outfname = File.join( parent_dir , fname_base )
         outfname_txt = outfname + ".txt"
         outfname_csv = outfname + ".csv"
+        # 出力先ファイル
         @output = File.open( outfname_txt , "w" , { :encoding => 'UTF-8' } )
+        # 出力先ファイル(CSV形式)
         @output_csv = CSV.open( outfname_csv , "w" , { :encoding => 'UTF-8' } )
       else
         @output = STDOUT
       end
     end
 
+    # 出力ファイル名のベース部分作成
     def get_output_filename_base
       Time.now.strftime("ennblist-%Y-%m-%d-%H-%M-%S")
     end
 
+    # 出力先に文字列出力
     def putsx( str )
       @output.puts( str )
     end
 
+    # Evernoteへ接続
     def connect
       # Get the URL used to interact with the contents of the user's account
       # When your application authenticates using OAuth, the NoteStore URL will
@@ -72,9 +76,11 @@ module Enop
       noteStoreUrl = "https://www.evernote.com/shard/s18/notestore"
       noteStoreTransport = Thrift::HTTPClientTransport.new(noteStoreUrl)
       noteStoreProtocol = Thrift::BinaryProtocol.new(noteStoreTransport)
+      # Evernoteノートストア
       @noteStore = Evernote::EDAM::NoteStore::NoteStore::Client.new(noteStoreProtocol)
     end
 
+    # Evernoteノートブック取得
     def get_notebooks
       begin
         notebooks = @noteStore.listNotebooks(@authToken)
@@ -98,6 +104,7 @@ module Enop
       notebooks
     end
 
+    # 指定Evernoteノートブックが含むノート数取得
     def get_note_count( notebookguid , filter = nil )
       filter = Evernote::EDAM::NoteStore::NoteFilter.new unless filter
       filter.notebookGuid = notebookguid
@@ -111,7 +118,9 @@ module Enop
       ret
     end
 
+    # 文字列で指定したノートブックに含まれるノートのタイトルとソースのURLの配列取得
     def get_url_from_notebook( name )
+      # Evernoteノートブック配列
       @notebooks = get_notebooks unless @notebooks
 
       filter = Evernote::EDAM::NoteStore::NoteFilter.new
@@ -136,20 +145,14 @@ module Enop
         ourNoteList = @noteStore.findNotesMetadata(@authToken, filter, cnt, count_unit, spec)
         array_of_array << ourNoteList.notes.map{ |x| [x.title , x.attributes.sourceURL] }
       }
-=begin
-      while count < notebookCounts
-        ourNoteList = @noteStore.findNotesMetadata(@authToken, filter, count, count_unit, spec)
-        ourNoteList.notes.map{ |x| url_array << [x.title , .attributes.sourceURL] }
-#        ourNoteList.notes.map{ |x| p x }
-        count += count_unit
-      end
-=end
       array_of_array.flatten(1)
     end
 
+    # Evernoteノートブックに関する情報一覧
     def list_notebooks
       # List all of the notebooks in the user's account
 
+      # Evernoteノートブック配列
       @notebooks = get_notebooks unless @notebooks
 
       filter = Evernote::EDAM::NoteStore::NoteFilter.new
@@ -192,6 +195,7 @@ module Enop
       pp memo[:defaultNotebook]
     end
 
+    # スタックにノートブックに関する情報を登録
     def register_notebook( stack , nbinfo )
       @stack_hs[stack] ||= []
       @stack_hs[stack] << nbinfo
@@ -201,4 +205,3 @@ module Enop
     end
   end
 end
-

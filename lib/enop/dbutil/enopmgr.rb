@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-require 'active_record'
-#require 'forwardable'
+require 'active_record'#require 'forwardable'
 require 'pp'
 
 module Enop
+  # DB操作用ユーティリティモジュール
   module Dbutil
+    # Evernoteに関する情報用DB操作クラス
     class EnopMgr
-#      extend Forwardable
-
+      # 初期化
       def initialize(register_time)
         @register_time = register_time
         @ct = Countdatetime.create( countdatetime: @register_time )
@@ -15,6 +15,7 @@ module Enop
         @hs_by_id = {}
       end
 
+      # 指定stack(文字列)にノートブック(文字列)、ノートブック数、タグ数を追加
       def add( stack , notebook, count, tag_count )
         ennblist = @hs_by_notebook[notebook]
         unless ennblist
@@ -57,6 +58,7 @@ module Enop
         ennblist
       end
 
+      # 後処理
       def post_process( dir_id )
         h_ids = Currentennblist.pluck(:org_id)
         t_ids = @hs_by_id.keys
@@ -70,5 +72,3 @@ module Enop
     end
   end
 end
-
-

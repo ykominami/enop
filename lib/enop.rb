@@ -3,8 +3,7 @@ require "arxutils"
 require "enop/version"
 require "enop/enop"
 require "enop/dbutil"
-#require "enop/dbutil/dbmgr"
-#require "enop/dbutil/enopmgr"
 
+# Evernote操作用モジュール
 module Enop
 end
