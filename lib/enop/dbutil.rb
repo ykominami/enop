@@ -1,4 +1,4 @@
 # -*- coding: utf-8 -*-
 
-require 'enop/dbutil/dbmgr'
+require 'enop/dbutil/dbrelation'
 require 'enop/dbutil/enopmgr'
