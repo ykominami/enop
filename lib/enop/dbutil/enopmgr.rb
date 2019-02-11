@@ -1,29 +1,13 @@
 # -*- coding: utf-8 -*-
 require 'active_record'
-require 'forwardable'
+#require 'forwardable'
 require 'pp'
 
 module Enop
   module Dbutil
-    class Ennblist < ActiveRecord::Base
-    end
-
-    class Invalidennblist < ActiveRecord::Base
-    end
-
-    class Currentennblist < ActiveRecord::Base
-      belongs_to :ennblist , foreign_key: 'org_id'
-    end
-
-    class Evnb < ActiveRecord::Base
-    end
-
-    class Countdatetime < ActiveRecord::Base
-    end
-
     class EnopMgr
-      extend Forwardable
-      
+#      extend Forwardable
+
       def initialize(register_time)
         @register_time = register_time
         @ct = Countdatetime.create( countdatetime: @register_time )
@@ -65,14 +49,14 @@ module Enop
         else
           # ignore this case.
         end
-        
+
         if ennblist
           @hs_by_notebook[notebook] = ennblist
           @hs_by_id[ennblist.id] = ennblist
         end
         ennblist
       end
-      
+
       def post_process( dir_id )
         h_ids = Currentennblist.pluck(:org_id)
         t_ids = @hs_by_id.keys
