@@ -78,4 +78,3 @@ Arxutils::Migrate.migrate(
                           opts["dbconfig"],
                           opts,
                           )
-
