@@ -29,8 +29,8 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency "evernote_oauth"
   spec.add_runtime_dependency "activerecord" , "~> 4.2"
-  spec.add_runtime_dependency "sqlite3" , "~> 1.3.13"
   spec.add_runtime_dependency "mysql2" , "~> 0.4.1"
+  spec.add_runtime_dependency "sqlite3" , "~> 1.3.13"
   spec.add_runtime_dependency "arxutils", "~> 0.1.10"
 
   spec.add_development_dependency "bundler"
