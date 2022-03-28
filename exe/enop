@@ -3,16 +3,17 @@
 require 'arxutils'
 require 'enop'
 require 'simpleoptparse'
+require 'pstore'
 
 env = ENV['ENV']
 #env ||= "development"
 env ||= "production"
 
 opts = { db_dir: Arxutils::Dbutil::DB_DIR }
-banner = "Usage: bundle exec ruby exe/enope token url [--mysql|--sqlite3]"
+banner = "Usage: bundle exec ruby exe/enopjson json_fname"
 
 if ARGV.size > 1
-  token = ARGV.shift 
+  token = ARGV.shift
   url = ARGV.shift
 else
   puts banner
@@ -37,6 +38,7 @@ hs = {
   "output_dir" => "output"
 }
 
+
 enop = Enop::Enop.new(
                       token,
                       hs,
@@ -44,4 +46,23 @@ enop = Enop::Enop.new(
                       url,
                       )
 enop.connect
-enop.list_notebooks
+#enop.list_notebooks
+#enop.list_notebooks(true)
+#enop.getLatest100Notes
+#enop.getx
+#enop.getx_2
+
+#enop.gety
+#enop.getz
+#enop.geta
+#enop.get_notes_having_pdf
+#p enop.notebooks_hs_backup.size
+#enop.get_notes_having_pdf
+#enop.get_notes_having_pdf(true)
+#p enop.notebooks_hs_notelist_backup.size
+#p enop.notebooks_hs_notelist_backup
+#enop.list_note_having_pdf(true)
+#enop.list_note_having_pdf
+#enop.x
+#enop.list_notebooks(true)
+enop.list_notebooks_having_pdf(true)
