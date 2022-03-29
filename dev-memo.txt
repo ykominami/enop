@@ -1,0 +1,34 @@
+# Evernoteの検索結果
+<Evernote::EDAM::NoteStore::NotesMetadataList
+ startIndex:0,
+ totalNotes:2514,
+ notes:[
+	<Evernote::EDAM::NoteStore::NoteMetadata
+	 guid:"1038db1b-d87e-4bf3-9723-f514c3a05c37",
+	 title:"PDF - www.maphysto.dk",
+	 created:1647208285000, updated:1647208285000,
+	 updateSequenceNum:2775880,
+	 notebookGuid:"00be4cc9-c803-423f-9dfd-9abc5f723a9f",
+	 attributes:<Evernote::EDAM::Type::NoteAttributes
+		 source:"web.clip7",
+		 sourceURL:"http://www.maphysto.dk/publications/MPS-RR/2001/45.pdf",
+		 sourceApplication:"webclipper.evernote">>,
+
+updateCount:3266869>
+
+# ノートブック
+  <Evernote::EDAM::Type::Notebook
+ guid:"59ad9143-6da8-bd6c-2199-eb50ef7cc6d8",
+ name:"ruby_0dispose",
+ updateSequenceNum:3266006,
+ defaultNotebook:false,
+ serviceCreated:1647511809000,
+ serviceUpdated:1647834284000,
+ stack:"1-dev-lang",
+ restrictions:<Evernote::EDAM::Type::NotebookRestrictions noPublishToBusinessLibrary:true>>
+
+# 検索条件
+resource:image/gif
+
+resource:application/pdf
+
