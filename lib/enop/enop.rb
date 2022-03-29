@@ -180,9 +180,7 @@ module Enop
     end
 
     def get_notebooks_hs_from_backup
-      p "get_notebooks_hs_from_backup"
       if @notebooks_hs.size == 0
-        p "get_notebooks_hs_from_backup 1"
 
         get_notebooks_hs
       end
@@ -207,7 +205,6 @@ module Enop
     end
 
     def get_notes_having_pdf_sub_0(filter, spec, head, unit, total = nil)
-      p "get_notes_having_pdf_sub 1"
       ary = []
 
       tail = head + unit - 1
@@ -447,7 +444,14 @@ module Enop
       memox = get_stack_notebooks(from_backup)
       stack_list = []
       stack_list << %W(8-sci)
+      #stack_list << %W(1-security)
+      #stack_list << %W(1-dev-web-design)
       stack_list << %W(1-dev-lang)
+      #stack_list << %W(1-dev-web)
+      #stack_list << %W(1-dev-tech)
+      #stack_list << %W(1-dev-p)
+      #stack_list << %W(1-dev-env)
+      #stack_list << %W(0-PRJ)
       stack_list.flatten.map{ |stack|
         memox[stack].keys.sort.map{ |x| 
           guid = memox[stack][x].guid
