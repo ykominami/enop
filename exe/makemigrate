@@ -1,9 +1,15 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 
-require 'arxutils'
-require 'enop'
+#require "arxutils"
+require "arxutils_sqlite3"
+require "enop/version"
+#require "enop/enop"
+
+#require 'enop'
 require 'simpleoptparse'
+
+AR_VERSION=6.0
 
 db_scheme_ary = [
   {
@@ -13,7 +19,8 @@ db_scheme_ary = [
     :items => [
               ["countdatetime" , "datetime", "false"],
             ],
-    :plural => "countdatetimes"
+    :plural => "countdatetimes",
+    :ar_version => AR_VERSION,
   },
 
   {
@@ -24,7 +31,8 @@ db_scheme_ary = [
               ["time_id" , "integer", "false"],
               ["ennb_id" , "integer", "false"],
             ],
-    :plural => "evnbs"
+    :plural => "evnbs",
+    :ar_version => AR_VERSION,
   },
 
   {
@@ -39,12 +47,13 @@ db_scheme_ary = [
               ["tag_count" , "integer", "false"],
               ["start_datetime" , "datetime", "false"],
              ],
-    :plural => "ennblists"
+    :plural => "ennblists",
+    :ar_version => AR_VERSION,
   },
 ]
 
 opts = { 
-  db_dir: Arxutils::Dbutil::DB_DIR ,
+  db_dir: Arxutils_Sqlite3::Dbutil::DB_DIR ,
   relation: {
     module: ["Enop" , "Dbutil"],
     filename: "dbrelation.rb",
@@ -56,23 +65,23 @@ banner = "Usage: bundle exec ruby exe/makemigrate [--makeconfig|--remigrate|--my
 Simpleoptparse::Simpleoptparse.parse( ARGV , opts , banner , Enop::VERSION , nil ){ |parser|
   parser.on('-c','--makeconfig'  ) { |x| opts["makeconfig"] = true }
   parser.on('-r','--remigrate'  ) { |x| opts["remigrate"] = true }
-  parser.on('--mysql'  ) { |x| opts["dbconfig"] = Arxutils::Dbutil::DBCONFIG_MYSQL }
-  parser.on('--sqlite3'  ) { |x| opts["dbconfig"] = Arxutils::Dbutil::DBCONFIG_SQLITE3 }
+  parser.on('--mysql'  ) { |x| opts["dbconfig"] = Arxutils_Sqlite3::Dbutil::DBCONFIG_MYSQL }
+  parser.on('--sqlite3'  ) { |x| opts["dbconfig"] = Arxutils_Sqlite3::Dbutil::DBCONFIG_SQLITE3 }
 }
 opts["makeconfig"] = !opts["makeconfig"].nil?
 opts["remigrate"] = !opts["remigrate"].nil?
 
-opts["dbconfig"] = Arxutils::Dbutil::DBCONFIG_SQLITE3 unless opts["dbconfig"]
+opts["dbconfig"] = Arxutils_Sqlite3::Dbutil::DBCONFIG_SQLITE3 unless opts["dbconfig"]
 
 env = ENV['ENV']
 #env ||= "development"
 env ||= "production"
 
-Arxutils::Migrate.migrate(
-                          Arxutils::Dbutil::DB_DIR,
-                          Arxutils::Dbutil::CONFIG_DIR,
-                          Arxutils::Dbutil::DATABASELOG,
-                          Arxutils::Dbutil::MIGRATE_DIR,
+Arxutils_Sqlite3::Migrate.migrate(
+                          Arxutils_Sqlite3::Dbutil::DB_DIR,
+                          Arxutils_Sqlite3::Dbutil::CONFIG_DIR,
+                          Arxutils_Sqlite3::Dbutil::DATABASELOG,
+                          Arxutils_Sqlite3::Dbutil::MIGRATE_DIR,
                           env,
                           db_scheme_ary,
                           opts["dbconfig"],

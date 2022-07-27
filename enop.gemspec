@@ -35,7 +35,7 @@ Gem::Specification.new do |spec|
   # spec.add_runtime_dependency "activerecord" , "< 7.0"
   # spec.add_runtime_dependency "mysql2" , "~> 0.4.1"
   spec.add_runtime_dependency "sqlite3" , "~> 1.4.2"
-  spec.add_runtime_dependency "arxutils", "~> 0.1.10"
+  #spec.add_runtime_dependency "arxutils", "~> 0.1.10"
 
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake"

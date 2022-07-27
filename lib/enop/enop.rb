@@ -27,6 +27,7 @@ module Enop
       #hs = { notebooks_hs: @notebooks_hs, notelist: notelist }
 
       @notebooks_hs = @notebooks_hs_notelist_backup[:notebooks_hs]
+      @notebooks_hs = {} unless @notebooks_hs
       @notelist = @notebooks_hs_notelist_backup[:notelist]
       @memox = @notebooks_hs_notelist_backup[:memox]
 
@@ -40,7 +41,7 @@ module Enop
       # 認証トークン
       @authToken = authToken
 
-      register_time = Arxutils::Dbutil::DbMgr.init(hs["db_dir"], hs["migrate_dir"], hs["config_dir"], hs["dbconfig"], hs["env"], hs["log_fname"], opts)
+      register_time = Arxutils_Sqlite3::Dbutil::DbMgr.init(hs["db_dir"], hs["migrate_dir"], hs["config_dir"], hs["dbconfig"], hs["env"], hs["log_fname"], opts)
 
       # 保存用DBマネージャ
       @dbmgr = ::Enop::Dbutil::EnopMgr.new(register_time)
@@ -118,7 +119,7 @@ module Enop
       end
 
       #puts "Found #{notebooks.size} notebooks:"
-
+      puts "get_notebooks_from_remote notebooks_hs=#{notebooks_hs}"
       notebooks_hs
     end
 

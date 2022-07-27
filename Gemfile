@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 
 # Specify your gem's dependencies in enop.gemspec
 gemspec
-gem "arxutils", :path => 'c:/Users/ykomi/cur/ruby/arxutils'
-gem "simpleoptparse", :path => 'c:/Users/ykomi/cur/ruby/simpleoptparse'
+gem "arxutils_sqlite3", :github => 'ykominami/arxutils_sqlite3'
+gem "simpleoptparse"
 
-gem "standalone_migrations"

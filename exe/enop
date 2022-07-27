@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'arxutils'
+require 'arxutils_sqlite3'
 require 'enop'
 require 'simpleoptparse'
 require 'pstore'
@@ -9,8 +9,8 @@ env = ENV['ENV']
 #env ||= "development"
 env ||= "production"
 
-opts = { db_dir: Arxutils::Dbutil::DB_DIR }
-banner = "Usage: bundle exec ruby exe/enopjson json_fname"
+opts = { db_dir: Arxutils_Sqlite3::Dbutil::DB_DIR }
+banner = "Usage: bundle exec ruby exe/enop token url"
 
 if ARGV.size > 1
   token = ARGV.shift
@@ -21,19 +21,19 @@ else
 end
 
 Simpleoptparse::Simpleoptparse.parse( ARGV , opts , banner , Enop::VERSION , nil ){ |parser|
-    parser.on('--mysql'  ) { |x| opts["dbconfig"] = Arxutils::Dbutil::DBCONFIG_MYSQL }
-    parser.on('--sqlite3'  ) { |x| opts["dbconfig"] = Arxutils::Dbutil::DBCONFIG_SQLITE3 }
+    parser.on('--mysql'  ) { |x| opts["dbconfig"] = Arxutils_Sqlite3::Dbutil::DBCONFIG_MYSQL }
+    parser.on('--sqlite3'  ) { |x| opts["dbconfig"] = Arxutils_Sqlite3::Dbutil::DBCONFIG_SQLITE3 }
 }
 
-opts["dbconfig"] = Arxutils::Dbutil::DBCONFIG_SQLITE3 unless opts["dbconfig"]
+opts["dbconfig"] = Arxutils_Sqlite3::Dbutil::DBCONFIG_SQLITE3 unless opts["dbconfig"]
 
 hs = {
-  "db_dir" => Arxutils::Dbutil::DB_DIR,
-  "migrate_dir" => Arxutils::Dbutil::MIGRATE_DIR,
-  "config_dir" => Arxutils::Dbutil::CONFIG_DIR,
+  "db_dir" => Arxutils_Sqlite3::Dbutil::DB_DIR,
+  "migrate_dir" => Arxutils_Sqlite3::Dbutil::MIGRATE_DIR,
+  "config_dir" => Arxutils_Sqlite3::Dbutil::CONFIG_DIR,
   "dbconfig" => opts["dbconfig"],
   "env" => env,
-  "log_fname" => Arxutils::Dbutil::DATABASELOG,
+  "log_fname" => Arxutils_Sqlite3::Dbutil::DATABASELOG,
   :csv_fname => "x.csv",
   "output_dir" => "output"
 }
