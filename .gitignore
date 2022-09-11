@@ -30,3 +30,4 @@ x.csv
 /lib/dbrelation.rb
 run.bash
 .ruby-version
+/_*/

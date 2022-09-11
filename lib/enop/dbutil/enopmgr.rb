@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-require 'active_record'#require 'forwardable'
 require 'pp'
 
 module Enop
@@ -64,7 +63,7 @@ module Enop
         t_ids = @hs_by_id.keys
         ids = h_ids - t_ids
         if ids.size > 0
-          ids.each do |idx| 
+          ids.each do |idx|
             Invalidennblist.create( org_id: idx , end_datetime: @register_time )
           end
         end
