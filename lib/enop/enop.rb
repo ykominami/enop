@@ -13,7 +13,7 @@ module Enop
     # 初期化
     attr_reader :notebooks_hs, :notebooks_hs_backup, :notebooks_hs_notelist_backup
 
-    def initialize(authToken, hs, opts, userStoreUrl = nil)
+    def initialize(authToken, hs, userStoreUrl = nil)
       # SSL認証を行わないように変更
       OpenSSL::SSL.module_eval { remove_const(:VERIFY_PEER) }
       OpenSSL::SSL.const_set(:VERIFY_PEER, OpenSSL::SSL::VERIFY_NONE)
@@ -41,7 +41,19 @@ module Enop
       # 認証トークン
       @authToken = authToken
 
-      register_time = Arxutils_Sqlite3::Dbutil::DbMgr.init(hs["db_dir"], hs["migrate_dir"], hs["config_dir"], hs["dbconfig"], hs["env"], hs["log_fname"], opts)
+      db_dir = hs["db_dir"]
+      config_dir = hs["config_dir"]
+      env = hs["env"]
+      dbconfig = hs["dbconfig"]
+
+      dbconfig_path = Arxutils_Sqlite3::Util.make_dbconfig_path(config_dir, dbconfig)
+      log_path = Arxutils_Sqlite3::Util.make_log_path(db_dir, dbconfig)
+      dbconnect = Arxutils_Sqlite3::Dbutil::Dbconnect.new(
+        dbconfig_path,
+        env,
+        log_path
+      )
+      register_time = dbconnect.connect
 
       # 保存用DBマネージャ
       @dbmgr = ::Enop::Dbutil::EnopMgr.new(register_time)
@@ -119,7 +131,7 @@ module Enop
       end
 
       #puts "Found #{notebooks.size} notebooks:"
-      puts "get_notebooks_from_remote notebooks_hs=#{notebooks_hs}"
+      #puts "get_notebooks_from_remote notebooks_hs=#{notebooks_hs}"
       notebooks_hs
     end
 
@@ -394,9 +406,10 @@ module Enop
     end
 
     def list_notebooks(from_backup)
+      p "========================="
       memox = get_stack_notebooks(from_backup)
       memox.keys.sort.map { |slack|
-        puts slack
+        puts "slack=#{slack}"
         memox[slack].keys.sort.map { |nb_name|
           item = memox[slack][nb_name]
           puts " #{nb_name} #{item.guid}"

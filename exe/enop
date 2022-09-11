@@ -1,9 +1,17 @@
 #!/usr/bin/env ruby
 
-require 'arxutils_sqlite3'
+#require 'arxutils_sqlite3'
 require 'enop'
 require 'simpleoptparse'
 require 'pstore'
+require "ykxutils"
+
+config = Ykxutils.yaml_load_file_compati("config/auth/auth.yml")
+token = config["token"]
+url = config["url"]
+p config
+p "token=#{token}"
+p "url=#{url}"
 
 env = ENV['ENV']
 #env ||= "development"
@@ -12,6 +20,7 @@ env ||= "production"
 opts = { db_dir: Arxutils_Sqlite3::Dbutil::DB_DIR }
 banner = "Usage: bundle exec ruby exe/enop token url"
 
+=begin
 if ARGV.size > 1
   token = ARGV.shift
   url = ARGV.shift
@@ -19,50 +28,65 @@ else
   puts banner
   exit 10
 end
-
+=end
+=begin
 Simpleoptparse::Simpleoptparse.parse( ARGV , opts , banner , Enop::VERSION , nil ){ |parser|
     parser.on('--mysql'  ) { |x| opts["dbconfig"] = Arxutils_Sqlite3::Dbutil::DBCONFIG_MYSQL }
     parser.on('--sqlite3'  ) { |x| opts["dbconfig"] = Arxutils_Sqlite3::Dbutil::DBCONFIG_SQLITE3 }
 }
+=end
 
 opts["dbconfig"] = Arxutils_Sqlite3::Dbutil::DBCONFIG_SQLITE3 unless opts["dbconfig"]
 
 hs = {
+  "output_dir" => "output",
   "db_dir" => Arxutils_Sqlite3::Dbutil::DB_DIR,
-  "migrate_dir" => Arxutils_Sqlite3::Dbutil::MIGRATE_DIR,
   "config_dir" => Arxutils_Sqlite3::Dbutil::CONFIG_DIR,
-  "dbconfig" => opts["dbconfig"],
   "env" => env,
+  "dbconfig" => opts["dbconfig"],
+=begin
+  "migrate_dir" => Arxutils_Sqlite3::Dbutil::MIGRATE_DIR,
   "log_fname" => Arxutils_Sqlite3::Dbutil::DATABASELOG,
   :csv_fname => "x.csv",
-  "output_dir" => "output"
+=end
 }
 
 
 enop = Enop::Enop.new(
                       token,
                       hs,
-                      opts,
                       url,
                       )
 enop.connect
-#enop.list_notebooks
+p "================="
+enop.list_notebooks(false)
 #enop.list_notebooks(true)
 #enop.getLatest100Notes
-#enop.getx
-#enop.getx_2
 
-#enop.gety
-#enop.getz
-#enop.geta
 #enop.get_notes_having_pdf
 #p enop.notebooks_hs_backup.size
 #enop.get_notes_having_pdf
-#enop.get_notes_having_pdf(true)
+=begin
+p enop.get_notes_having_pdf(true).map{|x| 
+  if x.instance_of?(Array)
+    p x.title
+  end
+}
+=end
 #p enop.notebooks_hs_notelist_backup.size
-#p enop.notebooks_hs_notelist_backup
+=begin
+p enop.notebooks_hs_notelist_backup.map{ |x| 
+  x.map{|y|
+   # puts y.class
+   if y.instance_of?(Hash)
+    puts y.keys
+   elsif y.instance_of?(Symbol)
+    puts y
+   end
+  }
+}
+=end
 #enop.list_note_having_pdf(true)
 #enop.list_note_having_pdf
-#enop.x
 #enop.list_notebooks(true)
-enop.list_notebooks_having_pdf(true)
+#enop.list_notebooks_having_pdf(true)

@@ -25,3 +25,9 @@ x.csv
 /.vscode
 /a.rb
 /lib/evernote_config.rb
+/exe/run_enop
+/exe/a.rb
+/lib/dbrelation.rb
+run.bash
+.ruby-version
+/_*/
