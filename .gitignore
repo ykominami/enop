@@ -31,3 +31,4 @@ x.csv
 run.bash
 .ruby-version
 /_*/
+*.code-workspace
