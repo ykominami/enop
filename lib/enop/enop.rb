@@ -36,9 +36,6 @@ module Enop
       @stack_hs = {}
       # ノートブック情報の配列
       @nbinfos = {}
-      # ノートブック情報のStruct
-      @notebookinfo = Struct.new("NotebookInfo", :name, :stack, :defaultNotebook, :count, :tags)
-
       # noteStoreへのURL
       @noteStoreUrl = noteStoreUrl
       # 認証トークン
@@ -60,7 +57,7 @@ module Enop
 
       # 保存用DBマネージャ
       @dbmgr = ::Enop::Dbutil::EnopMgr.new(register_time)
-      puts "@dbmgr=#{@dbmgr}"
+      #puts "@dbmgr=#{@dbmgr}"
 
       # Invalid method name : 'checkVersion' が返されるので、とりあえずコメント化
       set_output_dest(hs["output_dir"], get_output_filename_base)
@@ -115,7 +112,7 @@ module Enop
         errorCode = ex.errorCode
         errorText = Evernote::EDAM::Error::EDAMErrorCode::VALUE_MAP[errorCode]
 
-        puts "Authentication failed (parameter: #{parameter} errorCode: #{errorText})"
+        #puts "Authentication failed (parameter: #{parameter} errorCode: #{errorText})"
 
         exit(1)
       rescue => ex
@@ -212,30 +209,8 @@ module Enop
       @output_csv << [stack, nbinfo.name, nbinfo.count]
     end
 
-    def get_notes_having_pdf_sub_0(filter, spec, head, unit, total = nil)
-      ary = []
-
-      tail = head + unit - 1
-      tail = total if total
-
-      head.step(tail, unit) { |i|
-        #puts "i=#{i}"
-        limit = i + unit - 1
-        limit = tail if limit >= tail
-        puts "i=#{i} limit=#{limit}"
-        ourNoteList = @noteStore.findNotesMetadata(@authToken, filter, i, limit, spec)
-        #ourNoteList = OpenStruct.new
-        #ourNoteList.totalNotes = 1000
-        #ourNoteList.notes = [ {}, {} ]
-        puts "ourNoteList.totalNotes=#{ourNoteList.totalNotes}"
-        puts "ourNoteList.notes.size=#{ourNoteList.notes.size}"
-        ary << ourNoteList
-      }
-      ary
-    end
-
     def get_notes_having_pdf_sub(filter, spec, head, unit, total = nil)
-      p "get_notes_having_pdf_sub 1"
+      #p "get_notes_having_pdf_sub 1"
       ary = []
 
       tail = head + unit - 1
@@ -245,20 +220,16 @@ module Enop
         #puts "i=#{i}"
         limit = i + unit - 1
         limit = tail if limit >= tail
-        puts "i=#{i} limit=#{limit}"
+        #puts "i=#{i} limit=#{limit}"
         ourNoteList = @noteStore.findNotesMetadata(@authToken, filter, i, limit, spec)
-        #ourNoteList = OpenStruct.new
-        #ourNoteList.totalNotes = 1000
-        #ourNoteList.notes = [ {}, {} ]
-        puts "ourNoteList.totalNotes=#{ourNoteList.totalNotes}"
-        puts "ourNoteList.notes.size=#{ourNoteList.notes.size}"
+        #puts "ourNoteList.totalNotes=#{ourNoteList.totalNotes}"
+        #puts "ourNoteList.notes.size=#{ourNoteList.notes.size}"
         ary << ourNoteList
       }
       ary
     end
 
     def get_notes_having_pdf_from_remote
-      puts " get_notes_having_pdf_from_remote 0"
       filter = Evernote::EDAM::NoteStore::NoteFilter.new
       filter.ascending = false
       filter.words = "resource:application/pdf"
@@ -278,19 +249,14 @@ module Enop
       unit = 500
       tail = head + unit
       notelists = []
-      # ourNoteList = @noteStore.findNotesMetadata(@authToken, filter, head, tail, spec)
-      # ourNoteList = get_notes_having_pdf_sub(filter, spec, head, unit)
       ary = get_notes_having_pdf_sub(filter, spec, head, unit)
       next_head = head + unit
       # total = ourNoteList.totalNotes
       total = ary[0].totalNotes
-      p "total=#{total}"
       notelists << ary[0].notes
-      # ourNoteList = get_notes_having_pdf_sub(filter, spec, next_head, unit, total)
       ary = get_notes_having_pdf_sub(filter, spec, next_head, unit, total)
       notelists << ary.map { |x| x.notes }
       notelist = notelists.flatten
-      p notelist.size
 
       hs = { notebooks_hs: @notebooks_hs, notelist: notelist }
       output_in_json(hs)
@@ -318,8 +284,8 @@ module Enop
     def list_note_having_pdf(from_backup = false)
       get_notes_having_pdf(from_backup)
       filter = make_filter("resource:application/pdf")
-      pp "@notelist.size=#{@notelist.size}"
-      pp "===="
+      #pp "@notelist.size=#{@notelist.size}"
+      #pp "===="
       stacks = @notelist.reduce({}) { |stack, note|
         item = OpenStruct.new
         item.guid = note.guid
@@ -336,12 +302,12 @@ module Enop
         stack
       }
       stacks.keys.sort.map { |name|
-        puts name
+        #puts name
         stacks[name].keys.sort.map { |x|
-           puts " #{x}"
-           puts stacks[name][x].map { |note|
-             "  #{note.title} #{note.guid}"
-           }
+           #puts " #{x}"
+           #puts stacks[name][x].map { |note|
+           #  "  #{note.title} #{note.guid}"
+           #}
         }
       }
     end
@@ -350,8 +316,8 @@ module Enop
     def list_note_having_pdf_0(from_backup = false)
       get_notes_having_pdf(from_backup)
       filter = make_filter("resource:application/pdf")
-      pp "@notelist.size=#{@notelist.size}"
-      pp "===="
+      #pp "@notelist.size=#{@notelist.size}"
+      #pp "===="
       stacks = @notelist.reduce({}) { |stack, note|
         item = OpenStruct.new
         item.guid = note.guid
@@ -368,12 +334,12 @@ module Enop
         stack
       }
       stacks.keys.sort.map { |name|
-        puts name
+       # puts name
         stacks[name].keys.sort.map { |x|
-           puts " #{x}"
-           puts stacks[name][x].map { |note|
-             "  #{note.title} #{note.guid}"
-           }
+           #puts " #{x}"
+           #puts stacks[name][x].map { |note|
+           #  "  #{note.title} #{note.guid}"
+           #}
         }
       }
     end
@@ -401,13 +367,13 @@ module Enop
     end
 
     def list_notebooks(from_backup)
-      p "========================="
+      #p "========================="
       memox = get_stack_notebooks(from_backup)
       memox.keys.sort.map { |slack|
-        puts "slack=#{slack}"
+        #puts "slack=#{slack}"
         memox[slack].keys.sort.map { |nb_name|
           item = memox[slack][nb_name]
-          puts " #{nb_name} #{item.guid}"
+          #puts " #{nb_name} #{item.guid}"
         }
       }
     end
@@ -424,10 +390,10 @@ module Enop
       totalNotes = ourNoteList.totalNotes
       i = i + ourNoteList.notes.size
       while i < totalNotes
-        puts "#{i}/#{totalNotes}"
+        #puts "#{i}/#{totalNotes}"
         ourNoteList = @noteStore.findNotesMetadata(@authToken, filter, i, unit, spec)
         ary <<  ourNoteList
-        break if ourNoteList.notes.size == 0 
+        break if ourNoteList.notes.size == 0
         i = i + ourNoteList.notes.size
       end
       notelist = ary.map{ |x| x.notes }.flatten
@@ -462,12 +428,12 @@ module Enop
       #stack_list << %W(1-dev-env)
       #stack_list << %W(0-PRJ)
       stack_list.flatten.map{ |stack|
-        memox[stack].keys.sort.map{ |x| 
+        memox[stack].keys.sort.map{ |x|
           guid = memox[stack][x].guid
-          puts "#{x} #{guid}"
+          #puts "#{x} #{guid}"
           size = get_note_having_pdf_by_notebook(guid, spec)
           memox[stack][x].size_of_notes = size
-          pp size
+          #pp size
         }
       }
       @notebooks_hs_notelist_backup[:memox] = memox
