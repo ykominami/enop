@@ -1,56 +1,45 @@
 #!/usr/bin/env ruby
 
-#require 'arxutils_sqlite3'
 require 'enop'
 require 'simpleoptparse'
 require 'pstore'
 require "ykxutils"
 
-config = Ykxutils.yaml_load_file_compati("config/auth/auth.yml")
-token = config["token"]
-url = config["url"]
-p config
-p "token=#{token}"
-p "url=#{url}"
+def show_token_url(config, token, url)
+  p config
+  p "token=#{token}"
+  p "url=#{url}"
+end
 
-env = ENV['ENV']
+config = nil
+token = ENV.fetch("EVERNOTE_DEVELOPER_TOKEN", nil)
+url = ENV.fetch("EVERNOTE_NOTESTORE_URL", nil)
+
+if token.nil?
+  config = Ykxutils.yaml_load_file_compati("config/auth/auth.yml")
+  token = config["token"]
+  url = config["url"]
+end
+
+#show_token_url(config, token, url)
+#exit
+
+env = ENV.fetch["ENV", nil]
 #env ||= "development"
 env ||= "production"
 
-opts = { db_dir: Arxutils_Sqlite3::Dbutil::DB_DIR }
+opts = { db_dir: Arxutils_Sqlite3::Config::DB_DIR }
 banner = "Usage: bundle exec ruby exe/enop token url"
 
-=begin
-if ARGV.size > 1
-  token = ARGV.shift
-  url = ARGV.shift
-else
-  puts banner
-  exit 10
-end
-=end
-=begin
-Simpleoptparse::Simpleoptparse.parse( ARGV , opts , banner , Enop::VERSION , nil ){ |parser|
-    parser.on('--mysql'  ) { |x| opts["dbconfig"] = Arxutils_Sqlite3::Dbutil::DBCONFIG_MYSQL }
-    parser.on('--sqlite3'  ) { |x| opts["dbconfig"] = Arxutils_Sqlite3::Dbutil::DBCONFIG_SQLITE3 }
-}
-=end
-
-opts["dbconfig"] = Arxutils_Sqlite3::Dbutil::DBCONFIG_SQLITE3 unless opts["dbconfig"]
+opts["dbconfig"] = Arxutils_Sqlite3::Config::DBCONFIG_SQLITE3 unless opts["dbconfig"]
 
 hs = {
   "output_dir" => "output",
-  "db_dir" => Arxutils_Sqlite3::Dbutil::DB_DIR,
-  "config_dir" => Arxutils_Sqlite3::Dbutil::CONFIG_DIR,
+  "db_dir" => Arxutils_Sqlite3::Config::DB_DIR,
+  "config_dir" => Arxutils_Sqlite3::Config::CONFIG_DIR,
   "env" => env,
   "dbconfig" => opts["dbconfig"],
-=begin
-  "migrate_dir" => Arxutils_Sqlite3::Dbutil::MIGRATE_DIR,
-  "log_fname" => Arxutils_Sqlite3::Dbutil::DATABASELOG,
-  :csv_fname => "x.csv",
-=end
 }
-
 
 enop = Enop::Enop.new(
                       token,
@@ -58,7 +47,7 @@ enop = Enop::Enop.new(
                       url,
                       )
 enop.connect
-p "================="
+#p "================="
 enop.list_notebooks(false)
 #enop.list_notebooks(true)
 #enop.getLatest100Notes
