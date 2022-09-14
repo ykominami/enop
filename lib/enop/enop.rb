@@ -13,10 +13,11 @@ module Enop
     # 初期化
     attr_reader :notebooks_hs, :notebooks_hs_backup, :notebooks_hs_notelist_backup
 
-    def initialize(authToken, hs, userStoreUrl = nil)
+    def initialize(authToken, hs, noteStoreUrl)
       # SSL認証を行わないように変更
       OpenSSL::SSL.module_eval { remove_const(:VERIFY_PEER) }
       OpenSSL::SSL.const_set(:VERIFY_PEER, OpenSSL::SSL::VERIFY_NONE)
+
       @store_db = PStore.new(Pathname.new(hs["output_dir"]) + "enop.dump")
       @notebooks_hs = {}
       @notebooks = []
@@ -38,6 +39,8 @@ module Enop
       # ノートブック情報のStruct
       @notebookinfo = Struct.new("NotebookInfo", :name, :stack, :defaultNotebook, :count, :tags)
 
+      # noteStoreへのURL
+      @noteStoreUrl = noteStoreUrl
       # 認証トークン
       @authToken = authToken
 
@@ -59,12 +62,6 @@ module Enop
       @dbmgr = ::Enop::Dbutil::EnopMgr.new(register_time)
       puts "@dbmgr=#{@dbmgr}"
 
-      evernoteHost = "www.evernote.com"
-      userStoreUrl = "https://#{evernoteHost}/shard/s18/notestore" unless userStoreUrl
-      userStoreTransport = Thrift::HTTPClientTransport.new(userStoreUrl)
-      userStoreProtocol = Thrift::BinaryProtocol.new(userStoreTransport)
-      # Evernoteユーザストア
-      @userStore = Evernote::EDAM::UserStore::UserStore::Client.new(userStoreProtocol)
       # Invalid method name : 'checkVersion' が返されるので、とりあえずコメント化
       set_output_dest(hs["output_dir"], get_output_filename_base)
     end
@@ -101,8 +98,7 @@ module Enop
       # be returned along with the auth token in the final OAuth request.
       # In that case, you don't need to make this call.
       #noteStoreUrl = userStore.getNoteStoreUrl(authToken)
-      noteStoreUrl = "https://www.evernote.com/shard/s18/notestore"
-      noteStoreTransport = Thrift::HTTPClientTransport.new(noteStoreUrl)
+      noteStoreTransport = Thrift::HTTPClientTransport.new(@noteStoreUrl)
       noteStoreProtocol = Thrift::BinaryProtocol.new(noteStoreTransport)
       # Evernoteノートストア
       @noteStore = Evernote::EDAM::NoteStore::NoteStore::Client.new(noteStoreProtocol)
@@ -110,7 +106,6 @@ module Enop
 
     # Evernoteノートブック取得
     def get_notebooks_from_remote
-
       notebooks_hs = {}
       begin
         notebooks = @noteStore.listNotebooks(@authToken)
