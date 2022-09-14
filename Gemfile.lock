@@ -2,7 +2,9 @@ PATH
   remote: .
   specs:
     enop (0.1.7)
+      arxutils_sqlite3
       evernote_oauth
+      ykxutils
 
 GEM
   remote: https://rubygems.org/
@@ -108,6 +110,7 @@ DEPENDENCIES
   rspec
   rubocop
   simpleoptparse
+  ykxutils
 
 BUNDLED WITH
    2.3.17
