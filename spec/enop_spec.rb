@@ -1,40 +1,31 @@
 require 'spec_helper'
 
-describe Enop do
+RSpec.describe Enop do
+  let( :token ) { ENV.fetch("EVERNOTE_DEVELOPER_TOKEN", nil) }
+  let( :url ) { ENV.fetch("EVERNOTE_NOTESTORE_URL", nil) }
+  let( :env ) { ENV.fetch("ENV", nil) }
+
   it 'has a version number' do
-    expect(Enop::VERSION).not_to be nil
+    expect(Enop::VERSION).not_to be_nil
   end
 
-  it 'does something useful' do
-    config = nil
-    token = ENV.fetch("EVERNOTE_DEVELOPER_TOKEN", nil)
-    url = ENV.fetch("EVERNOTE_NOTESTORE_URL", nil)
-
-    env = ENV.fetch("ENV", nil)
-    #env ||= "development"
+  it 'Enop get from local' , cmd: :local  do
+    remote = false
     env ||= "production"
+    enop = TestSetup.setup(token, url, env)
+    ret = enop.list_notebooks(remote)
 
-    opts = { db_dir: Arxutils_Sqlite3::Config::DB_DIR }
-    banner = "Usage: bundle exec ruby exe/enop token url"
+    expect(ret).not_to be_nil
+#    expect(ret).to eq(true)
+  end
 
-    opts["dbconfig"] = Arxutils_Sqlite3::Config::DBCONFIG_SQLITE3 unless opts["dbconfig"]
-    hs = {
-      "output_dir" => "output",
-      "db_dir" => Arxutils_Sqlite3::Config::DB_DIR,
-      "config_dir" => Arxutils_Sqlite3::Config::CONFIG_DIR,
-      "env" => env,
-      "dbconfig" => opts["dbconfig"],
-    }
-    enop = Enop::Enop.new(
-                          token,
-                          hs,
-                          url,
-                          )
-    enop.connect
-    #p "================="
-    ret = enop.list_notebooks(false)
+  it 'Enop get from remote' , cmd: :remote do
+    remote = true
+    env ||= "production"
+    enop = TestSetup.setup(token, url, env)
+    ret = enop.list_notebooks(remote)
 
-    expect(ret).to_not be(nil)
+    expect(ret).not_to be_nil
 #    expect(ret).to eq(true)
   end
 end

@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'enop/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "enop"
+  spec.name = "enop"
   spec.version       = Enop::VERSION
   spec.authors       = ["yasuo kominami"]
   spec.email         = ["ykominami@gmail.com"]
@@ -27,13 +27,20 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_runtime_dependency "evernote_oauth"
   spec.add_runtime_dependency "arxutils_sqlite3"
   spec.add_runtime_dependency "ykxutils"
   spec.add_development_dependency "simpleoptparse"
   
-  spec.add_development_dependency "bundler"
+  spec.add_runtime_dependency "evernote_oauth"
+  spec.add_runtime_dependency "ykutils"
+  
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "rubocop"
+  spec.add_development_dependency "rubocop-rake"
+  spec.add_development_dependency "rubocop-rspec"
+  spec.add_development_dependency "bundler"
+  spec.add_development_dependency "yard"
+
+  spec.metadata['rubygems_mfa_required'] = 'true'
 end

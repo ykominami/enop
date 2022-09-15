@@ -73,7 +73,7 @@ opts["remigrate"] = !opts["remigrate"].nil?
 
 opts["dbconfig"] = Arxutils_Sqlite3::Dbutil::DBCONFIG_SQLITE3 unless opts["dbconfig"]
 
-env = ENV['ENV']
+env = ENV.fetch('ENV', nil)
 #env ||= "development"
 env ||= "production"
 

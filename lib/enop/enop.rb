@@ -6,6 +6,7 @@ require "openssl"
 require "forwardable"
 require "pstore"
 require "json"
+
 #require "enop_sub"
 module Enop
   # Evernote操作クラス
@@ -13,7 +14,10 @@ module Enop
     # 初期化
     attr_reader :notebooks_hs, :notebooks_hs_backup, :notebooks_hs_notelist_backup
 
-    def initialize(authToken, hs, noteStoreUrl)
+    NOTEBOOK_ITEM = Struct.new(:guid, :title, :notebook_guid, :notebook_name, :stack)
+    NOTEBOOK_X = Struct.new(:name, :guid)
+
+    def initialize(authToken, noteStoreUrl, hs)
       # SSL認証を行わないように変更
       OpenSSL::SSL.module_eval { remove_const(:VERIFY_PEER) }
       OpenSSL::SSL.const_set(:VERIFY_PEER, OpenSSL::SSL::VERIFY_NONE)
@@ -36,9 +40,6 @@ module Enop
       @stack_hs = {}
       # ノートブック情報の配列
       @nbinfos = {}
-      # ノートブック情報のStruct
-      @notebookinfo = Struct.new("NotebookInfo", :name, :stack, :defaultNotebook, :count, :tags)
-
       # noteStoreへのURL
       @noteStoreUrl = noteStoreUrl
       # 認証トークン
@@ -48,21 +49,10 @@ module Enop
       config_dir = hs["config_dir"]
       env = hs["env"]
       dbconfig = hs["dbconfig"]
-
-      dbconfig_path = Arxutils_Sqlite3::Util.make_dbconfig_path(config_dir, dbconfig)
-      log_path = Arxutils_Sqlite3::Util.make_log_path(db_dir, dbconfig)
-      dbconnect = Arxutils_Sqlite3::Dbutil::Dbconnect.new(
-        dbconfig_path,
-        env,
-        log_path
-      )
-      register_time = dbconnect.connect
-
+      config = Arxutils_Sqlite3::Config.new
+      register_time = Arxutils_Sqlite3::Dbutil::Dbconnect.db_connect(config, dbconfig, env)
       # 保存用DBマネージャ
       @dbmgr = ::Enop::Dbutil::EnopMgr.new(register_time)
-      puts "@dbmgr=#{@dbmgr}"
-
-      # Invalid method name : 'checkVersion' が返されるので、とりあえずコメント化
       set_output_dest(hs["output_dir"], get_output_filename_base)
     end
 
@@ -98,6 +88,8 @@ module Enop
       # be returned along with the auth token in the final OAuth request.
       # In that case, you don't need to make this call.
       #noteStoreUrl = userStore.getNoteStoreUrl(authToken)
+      # puts "@noteStoreUrl=#{@noteStoreUrl}"
+      # puts "@noteStoreUrl.class=#{@noteStoreUrl.class}"
       noteStoreTransport = Thrift::HTTPClientTransport.new(@noteStoreUrl)
       noteStoreProtocol = Thrift::BinaryProtocol.new(noteStoreTransport)
       # Evernoteノートストア
@@ -114,19 +106,14 @@ module Enop
         parameter = ex.parameter
         errorCode = ex.errorCode
         errorText = Evernote::EDAM::Error::EDAMErrorCode::VALUE_MAP[errorCode]
-
-        puts "Authentication failed (parameter: #{parameter} errorCode: #{errorText})"
-
         exit(1)
-      rescue => ex
+      rescue => exc
+        puts exc.message
         puts "@authToken=#{@authToken}"
         puts "Can't call listNotebooks"
-        p ex
         exit(2)
       end
 
-      #puts "Found #{notebooks.size} notebooks:"
-      #puts "get_notebooks_from_remote notebooks_hs=#{notebooks_hs}"
       notebooks_hs
     end
 
@@ -137,7 +124,8 @@ module Enop
       ret = nil
       begin
         ret = @noteStore.findNoteCounts(@authToken, filter, false)
-      rescue => ex
+      rescue => exc
+        puts exc.message
         puts "Can't call findNoteCounts with #{notebookguid}"
       end
 
@@ -212,53 +200,23 @@ module Enop
       @output_csv << [stack, nbinfo.name, nbinfo.count]
     end
 
-    def get_notes_having_pdf_sub_0(filter, spec, head, unit, total = nil)
-      ary = []
-
-      tail = head + unit - 1
-      tail = total if total
-
-      head.step(tail, unit) { |i|
-        #puts "i=#{i}"
-        limit = i + unit - 1
-        limit = tail if limit >= tail
-        puts "i=#{i} limit=#{limit}"
-        ourNoteList = @noteStore.findNotesMetadata(@authToken, filter, i, limit, spec)
-        #ourNoteList = OpenStruct.new
-        #ourNoteList.totalNotes = 1000
-        #ourNoteList.notes = [ {}, {} ]
-        puts "ourNoteList.totalNotes=#{ourNoteList.totalNotes}"
-        puts "ourNoteList.notes.size=#{ourNoteList.notes.size}"
-        ary << ourNoteList
-      }
-      ary
-    end
-
     def get_notes_having_pdf_sub(filter, spec, head, unit, total = nil)
-      p "get_notes_having_pdf_sub 1"
+      #p "get_notes_having_pdf_sub 1"
       ary = []
 
       tail = head + unit - 1
       tail = total if total
 
       head.step(tail, unit) { |i|
-        #puts "i=#{i}"
         limit = i + unit - 1
         limit = tail if limit >= tail
-        puts "i=#{i} limit=#{limit}"
         ourNoteList = @noteStore.findNotesMetadata(@authToken, filter, i, limit, spec)
-        #ourNoteList = OpenStruct.new
-        #ourNoteList.totalNotes = 1000
-        #ourNoteList.notes = [ {}, {} ]
-        puts "ourNoteList.totalNotes=#{ourNoteList.totalNotes}"
-        puts "ourNoteList.notes.size=#{ourNoteList.notes.size}"
         ary << ourNoteList
       }
       ary
     end
 
     def get_notes_having_pdf_from_remote
-      puts " get_notes_having_pdf_from_remote 0"
       filter = Evernote::EDAM::NoteStore::NoteFilter.new
       filter.ascending = false
       filter.words = "resource:application/pdf"
@@ -278,19 +236,14 @@ module Enop
       unit = 500
       tail = head + unit
       notelists = []
-      # ourNoteList = @noteStore.findNotesMetadata(@authToken, filter, head, tail, spec)
-      # ourNoteList = get_notes_having_pdf_sub(filter, spec, head, unit)
       ary = get_notes_having_pdf_sub(filter, spec, head, unit)
       next_head = head + unit
       # total = ourNoteList.totalNotes
       total = ary[0].totalNotes
-      p "total=#{total}"
       notelists << ary[0].notes
-      # ourNoteList = get_notes_having_pdf_sub(filter, spec, next_head, unit, total)
       ary = get_notes_having_pdf_sub(filter, spec, next_head, unit, total)
       notelists << ary.map { |x| x.notes }
       notelist = notelists.flatten
-      p notelist.size
 
       hs = { notebooks_hs: @notebooks_hs, notelist: notelist }
       output_in_json(hs)
@@ -318,62 +271,29 @@ module Enop
     def list_note_having_pdf(from_backup = false)
       get_notes_having_pdf(from_backup)
       filter = make_filter("resource:application/pdf")
-      pp "@notelist.size=#{@notelist.size}"
-      pp "===="
+      # pp "@notelist.size=#{@notelist.size}"
+      # pp "===="
       stacks = @notelist.reduce({}) { |stack, note|
-        item = OpenStruct.new
+        # item = OpenStruct.new
+        item = NOTEBOOK_ITEM.new
         item.guid = note.guid
         item.title = note.title
         item.notebook_guid = note.notebookGuid
         item.notebook_name = @notebooks_hs[note.notebookGuid].name
         item.stack = @notebooks_hs[note.notebookGuid].stack
         item.stack = "" unless item.stack
-        #pp @notebooks_hs[note.notebookGuid]
-        #exit
         stack[item.stack] ||= {}
         stack[item.stack][item.notebook_name] ||= []
         stack[item.stack][item.notebook_name] << item
         stack
       }
       stacks.keys.sort.map { |name|
-        puts name
+        # puts name
         stacks[name].keys.sort.map { |x|
-           puts " #{x}"
-           puts stacks[name][x].map { |note|
-             "  #{note.title} #{note.guid}"
-           }
-        }
-      }
-    end
-
-
-    def list_note_having_pdf_0(from_backup = false)
-      get_notes_having_pdf(from_backup)
-      filter = make_filter("resource:application/pdf")
-      pp "@notelist.size=#{@notelist.size}"
-      pp "===="
-      stacks = @notelist.reduce({}) { |stack, note|
-        item = OpenStruct.new
-        item.guid = note.guid
-        item.title = note.title
-        item.notebook_guid = note.notebookGuid
-        item.notebook_name = @notebooks_hs[note.notebookGuid].name
-        item.stack = @notebooks_hs[note.notebookGuid].stack
-        item.stack = "" unless item.stack
-        #pp @notebooks_hs[note.notebookGuid]
-        #exit
-        stack[item.stack] ||= {}
-        stack[item.stack][item.notebook_name] ||= []
-        stack[item.stack][item.notebook_name] << item
-        stack
-      }
-      stacks.keys.sort.map { |name|
-        puts name
-        stacks[name].keys.sort.map { |x|
-           puts " #{x}"
-           puts stacks[name][x].map { |note|
-             "  #{note.title} #{note.guid}"
-           }
+           # puts " #{x}"
+           # puts stacks[name][x].map { |note|
+           #  "  #{note.title} #{note.guid}"
+           #}
         }
       }
     end
@@ -391,7 +311,8 @@ module Enop
         stack = nb.stack
         stack = "" unless stack
         memo[stack] ||= {}
-        item = OpenStruct.new
+        #item = OpenStruct.new
+        item = NOTEBOOK_X.new
         item.name = nb.name
         item.name = "" unless item.name
         item.guid = nb.guid
@@ -401,13 +322,12 @@ module Enop
     end
 
     def list_notebooks(from_backup)
-      p "========================="
       memox = get_stack_notebooks(from_backup)
       memox.keys.sort.map { |slack|
-        puts "slack=#{slack}"
+        # puts "slack=#{slack}"
         memox[slack].keys.sort.map { |nb_name|
           item = memox[slack][nb_name]
-          puts " #{nb_name} #{item.guid}"
+          # puts " #{nb_name} #{item.guid}"
         }
       }
     end
@@ -424,10 +344,10 @@ module Enop
       totalNotes = ourNoteList.totalNotes
       i = i + ourNoteList.notes.size
       while i < totalNotes
-        puts "#{i}/#{totalNotes}"
+        # puts "#{i}/#{totalNotes}"
         ourNoteList = @noteStore.findNotesMetadata(@authToken, filter, i, unit, spec)
         ary <<  ourNoteList
-        break if ourNoteList.notes.size == 0 
+        break if ourNoteList.notes.size == 0
         i = i + ourNoteList.notes.size
       end
       notelist = ary.map{ |x| x.notes }.flatten
@@ -444,7 +364,7 @@ module Enop
       spec.includeNotebookGuid = true
       spec.includeTagGuids = true
       spec.includeAttributes = true
-      #spec.includeNotebookGuid = true
+      # spec.includeNotebookGuid = true
       spec
     end
 
@@ -453,21 +373,21 @@ module Enop
       memox = get_stack_notebooks(from_backup)
       stack_list = []
       stack_list << %W(8-sci)
-      #stack_list << %W(1-security)
-      #stack_list << %W(1-dev-web-design)
+      # stack_list << %W(1-security)
+      # stack_list << %W(1-dev-web-design)
       stack_list << %W(1-dev-lang)
-      #stack_list << %W(1-dev-web)
-      #stack_list << %W(1-dev-tech)
-      #stack_list << %W(1-dev-p)
-      #stack_list << %W(1-dev-env)
-      #stack_list << %W(0-PRJ)
+      # stack_list << %W(1-dev-web)
+      # stack_list << %W(1-dev-tech)
+      # stack_list << %W(1-dev-p)
+      # stack_list << %W(1-dev-env)
+      # stack_list << %W(0-PRJ)
       stack_list.flatten.map{ |stack|
-        memox[stack].keys.sort.map{ |x| 
+        memox[stack].keys.sort.map{ |x|
           guid = memox[stack][x].guid
-          puts "#{x} #{guid}"
+          # puts "#{x} #{guid}"
           size = get_note_having_pdf_by_notebook(guid, spec)
           memox[stack][x].size_of_notes = size
-          pp size
+          # pp size
         }
       }
       @notebooks_hs_notelist_backup[:memox] = memox
