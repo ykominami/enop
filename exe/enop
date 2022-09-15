@@ -4,56 +4,27 @@ require 'enop'
 require 'simpleoptparse'
 require 'pstore'
 require "ykxutils"
+require "arxutils_sqlite3"
 
-def show_token_url(config, token, url)
-  p config
-  p "token=#{token}"
-  p "url=#{url}"
-end
-
-config = nil
-token = ENV.fetch("EVERNOTE_DEVELOPER_TOKEN", nil)
-url = ENV.fetch("EVERNOTE_NOTESTORE_URL", nil)
-
-if token.nil?
-  config = Ykxutils.yaml_load_file_compati("config/auth/auth.yml")
-  token = config["token"]
-  url = config["url"]
-end
-
-#show_token_url(config, token, url)
-#exit
-
-env = ENV.fetch("ENV", nil)
-#env ||= "development"
-env ||= "production"
-
-banner = "Usage: bundle exec ruby exe/enop"
-
-hash = {
-  "output_dir" => "output",
-  "db_dir" => Arxutils_Sqlite3::Config::DB_DIR,
-  "config_dir" => Arxutils_Sqlite3::Config::CONFIG_DIR,
-  "env" => env,
-  "dbconfig" => Arxutils_Sqlite3::Config::DBCONFIG_SQLITE3,
-}
-
+token, url, hash = Enop::Cli.setup
 enop = Enop::Enop.new(
                       token,
-                      hash,
                       url,
+                      hash,
                       )
 enop.connect
-#p "================="
-enop.list_notebooks(false)
-#enop.list_notebooks(true)
+
+list = enop.list_notebooks(true)
+puts list.size
+puts "==="
+list.map{ |x| puts x.size }
 #enop.getLatest100Notes
 
 #enop.get_notes_having_pdf
 #p enop.notebooks_hs_backup.size
 #enop.get_notes_having_pdf
 =begin
-p enop.get_notes_having_pdf(true).map{|x| 
+enop.get_notes_having_pdf(true).map{|x|
   if x.instance_of?(Array)
     p x.title
   end
@@ -61,7 +32,7 @@ p enop.get_notes_having_pdf(true).map{|x|
 =end
 #p enop.notebooks_hs_notelist_backup.size
 =begin
-p enop.notebooks_hs_notelist_backup.map{ |x| 
+p enop.notebooks_hs_notelist_backup.map{ |x|
   x.map{|y|
    # puts y.class
    if y.instance_of?(Hash)

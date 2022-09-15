@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-require 'pp'
+require "pp"
 
 module Enop
   # DB操作用ユーティリティモジュール
@@ -21,13 +20,13 @@ module Enop
           cur_ennblist = Currentennblist.where( notebook: notebook ).limit(1)
           if cur_ennblist.size == 0
             begin
-              ennblist = Ennblist.create( stack: stack, notebook: notebook , count: count, tag_count: tag_count , start_datetime: @register_time )
+              ennblist = Ennblist.create( stack: stack, notebook: notebook , count: count,
+                                          tag_count: tag_count,　start_datetime: @register_time )
               evnb = Evnb.create( time_id: @ct.id , ennb_id: ennblist.id )
-            rescue => ex
-              p ex.class
-              p ex.message
-              pp ex.backtrace
-
+            rescue => exc
+              puts exc.class
+              puts exc.message
+              puts exc.backtrace
               ennblist = nil
               evnb = nil
             end
@@ -35,9 +34,7 @@ module Enop
             current_ennblist = cur_ennblist.first.ennblist
             hs = {:stack => stack, :count => count , :tag_count => tag_count }
             value_hs = hs.reduce({}){ |hsx,item|
-              if current_ennblist[ item[0] ] != item[1]
-                hsx[ item[0] ] = item[1]
-              end
+              hsx[ item[0] ] = item[1] if current_ennblist[ item[0] ] != item[1]
               hsx
             }
             if value_hs.size > 0
@@ -49,7 +46,6 @@ module Enop
         else
           # ignore this case.
         end
-
         if ennblist
           @hs_by_notebook[notebook] = ennblist
           @hs_by_id[ennblist.id] = ennblist

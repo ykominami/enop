@@ -6,24 +6,26 @@ RSpec.describe Enop do
   let( :env ) { ENV.fetch("ENV", nil) }
 
   it 'has a version number' do
-    expect(Enop::VERSION).not_to be nil
+    expect(Enop::VERSION).not_to be_nil
   end
 
   it 'Enop get from local' , cmd: :local  do
     remote = false
-    enop = TestSetup.setup(token, url, env, false)
+    env ||= "production"
+    enop = TestSetup.setup(token, url, env)
     ret = enop.list_notebooks(remote)
 
-    expect(ret).to_not be(nil)
+    expect(ret).not_to be_nil
 #    expect(ret).to eq(true)
   end
 
   it 'Enop get from remote' , cmd: :remote do
     remote = true
-    enop = TestSetup.setup(token, url, env, true)
+    env ||= "production"
+    enop = TestSetup.setup(token, url, env)
     ret = enop.list_notebooks(remote)
 
-    expect(ret).to_not be(nil)
+    expect(ret).not_to be_nil
 #    expect(ret).to eq(true)
   end
 end

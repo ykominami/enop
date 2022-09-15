@@ -14,23 +14,17 @@ RSpec.configure do |config|
 end
 
 class TestSetup
-  def self.setup(token, url, env, remote = false)
-    config = nil
-    env ||= "production"
-
-    banner = "Usage: bundle exec ruby exe/enop"
-
-    hs = {
-      "output_dir" => "output",
-      "db_dir" => Arxutils_Sqlite3::Config::DB_DIR,
-      "config_dir" => Arxutils_Sqlite3::Config::CONFIG_DIR,
-      "env" => env,
-      "dbconfig" => Arxutils_Sqlite3::Config::DBCONFIG_SQLITE3,
-    }
+  def self.setup(token, url, env)
+    token_x, url_x, hash = Enop::Cli.setup
+    unless token
+      token = token_x
+      url = url_x
+    end
+    hash["env"] = env if env
     enop = Enop::Enop.new(
                           token,
-                          hs,
                           url,
+                          hash,
                           )
     enop.connect
     enop
