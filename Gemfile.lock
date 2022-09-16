@@ -103,7 +103,7 @@ GEM
       erubi
       filex
       tilt
-    ykxutils (0.1.5)
+    ykxutils (0.1.6)
     zeitwerk (2.6.0)
 
 PLATFORMS

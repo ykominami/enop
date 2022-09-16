@@ -28,7 +28,7 @@ RuboCop::RakeTask.new
 #task default: :test
 
 desc "Evernote related operaion"
-task default: :enop
+task default: %i[spec rubocop]
 
 desc "Evernote related operaion"
 task :enop do

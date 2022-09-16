@@ -4,8 +4,8 @@ require "csv"
 require "pp"
 require "openssl"
 require "forwardable"
-require "pstore"
 require "json"
+require 'ykxutils'
 
 #require "enop_sub"
 module Enop
@@ -22,13 +22,12 @@ module Enop
       OpenSSL::SSL.module_eval { remove_const(:VERIFY_PEER) }
       OpenSSL::SSL.const_set(:VERIFY_PEER, OpenSSL::SSL::VERIFY_NONE)
 
-      @store_db = PStore.new(Pathname.new(hs["output_dir"]) + "enop.dump")
       @notebooks_hs = {}
       @notebooks = []
-      @store_db.transaction do
-        @store_db.delete(:notebooks)
-        @notebooks_hs_notelist_backup = @store_db.fetch(:notebooks_hs_notelist, {})
-      end
+
+      @pstorex = Ykxutils::Pstorex.new(hs["output_dir"], "enop.dump")
+      @pstorex.delete(:notebooks)
+      @notebooks_hs_notelist_backup = @pstorex.fetch(:notebooks_hs_notelist, {})
       #hs = { notebooks_hs: @notebooks_hs, notelist: notelist }
 
       @notebooks_hs = @notebooks_hs_notelist_backup[:notebooks_hs]
@@ -168,9 +167,7 @@ module Enop
         # Evernoteノートブック配列
         @notebooks_hs_notelist_backup[:notebooks_hs] = @notebooks_hs
 
-        @store_db.transaction do
-          @store_db[:notebooks_hs_notelist] = @notebooks_hs_notelist_backup
-        end
+        @pstorex.store(:notebooks_hs_notelist, @notebooks_hs_notelist_backup)
       end
       @notebooks_hs
     end
@@ -247,9 +244,7 @@ module Enop
 
       hs = { notebooks_hs: @notebooks_hs, notelist: notelist }
       output_in_json(hs)
-      @store_db.transaction do
-        @store_db[:notebooks_hs_notelist] = hs
-      end
+      @pstorex.store(:notebooks_hs_notelist, hs)
       @notebooks_hs_notelist_backup = hs
     end
 
@@ -391,9 +386,7 @@ module Enop
         }
       }
       @notebooks_hs_notelist_backup[:memox] = memox
-      @store_db.transaction do
-        @store_db[:notebooks_hs_notelist] = @notebooks_hs_notelist_backup
-      end
+      @pstorex.store(:notebooks_hs_notelist, @notebooks_hs_notelist_backup)
     end
 
     def getLatest100Notes(from_backup = false)
@@ -419,9 +412,7 @@ module Enop
       ourNoteList = @noteStore.findNotesMetadata(@authToken, filter, head, tail, spec)
       hs = { notebooks_hs: notebooks_hs, notelist: ourNoteList }
       output_in_json(hs)
-      @store_db.transaction do
-        @store_db[:notebooks_hs_notelist] = hs
-      end
+      @pstorex.store(:notebooks_hs_notelist, hs)
     end
   end
 end
