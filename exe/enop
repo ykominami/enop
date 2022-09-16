@@ -15,9 +15,9 @@ enop = Enop::Enop.new(
 enop.connect
 
 list = enop.list_notebooks(true)
-puts list.size
-puts "==="
-list.map{ |x| puts x.size }
+#puts list.size
+#puts "==="
+#list.map { |x| puts x.size }
 #enop.getLatest100Notes
 
 #enop.get_notes_having_pdf

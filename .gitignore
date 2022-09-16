@@ -31,3 +31,5 @@ run.bash
 .ruby-version
 /_*/
 *.code-workspace
+.rspec_status
+
