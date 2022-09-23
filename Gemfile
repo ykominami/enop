@@ -1,10 +1,10 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
 # Specify your gem's dependencies in enop.gemspec
 gemspec
 gem "arxutils_sqlite3"
-gem "ykxutils"
 gem "evernote_oauth"
+gem "ykxutils"
 
 gem "ykutils", "> 0.1.3"
 
@@ -18,4 +18,3 @@ gem "rubocop-rspec"
 group :development do
   gem "yard"
 end
-
