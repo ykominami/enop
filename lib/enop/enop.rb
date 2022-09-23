@@ -89,6 +89,7 @@ module Enop
       #noteStoreUrl = userStore.getNoteStoreUrl(authToken)
       # puts "@noteStoreUrl=#{@noteStoreUrl}"
       # puts "@noteStoreUrl.class=#{@noteStoreUrl.class}"
+      # puts "@noteStoreUrl=#{@noteStoreUrl}"
       noteStoreTransport = Thrift::HTTPClientTransport.new(@noteStoreUrl)
       noteStoreProtocol = Thrift::BinaryProtocol.new(noteStoreTransport)
       # Evernoteノートストア

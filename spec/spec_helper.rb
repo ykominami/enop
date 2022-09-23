@@ -16,6 +16,7 @@ end
 class TestSetup
   def self.setup(token, url, env)
     token_x, url_x, hash = Enop::Cli.setup
+    puts "token_x=", token_x
     unless token
       token = token_x
       url = url_x

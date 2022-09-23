@@ -12,15 +12,18 @@ enop = Enop::Enop.new(
                       url,
                       hash,
                       )
+
 enop.connect
 
-list = enop.list_notebooks(true)
-#puts list.size
-#puts "==="
-#list.map { |x| puts x.size }
-#enop.getLatest100Notes
+# local = true
+local = false
 
-#enop.get_notes_having_pdf
+list = enop.list_notebooks(local)
+# puts list.size
+list.map { |x| puts x.size }
+enop.getLatest100Notes
+
+enop.get_notes_having_pdf
 #p enop.notebooks_hs_backup.size
 #enop.get_notes_having_pdf
 =begin

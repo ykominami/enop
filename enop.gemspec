@@ -29,10 +29,9 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency "arxutils_sqlite3"
   spec.add_runtime_dependency "ykxutils"
-  spec.add_development_dependency "simpleoptparse"
+  spec.add_runtime_dependency "ykutils"
   
   spec.add_runtime_dependency "evernote_oauth"
-  spec.add_runtime_dependency "ykutils"
   
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
