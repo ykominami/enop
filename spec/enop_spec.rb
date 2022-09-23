@@ -1,8 +1,9 @@
 require 'spec_helper'
 
 RSpec.describe Enop do
-  let( :token ) { ENV.fetch("EVERNOTE_DEVELOPER_TOKEN", nil) }
-  let( :url ) { ENV.fetch("EVERNOTE_NOTESTORE_URL", nil) }
+  # let( :token ) { ENV.fetch("EN_DEV_TOKEN", nil) }
+  let( :token ) { ENV["EN_DEV_TOKEN"] }
+  let( :url ) { ENV.fetch("EN_NOTESTORE_URL", nil) }
   let( :env ) { ENV.fetch("ENV", nil) }
 
   it 'has a version number' do
