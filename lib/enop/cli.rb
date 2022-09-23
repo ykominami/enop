@@ -10,7 +10,7 @@ module Enop
     end
 
     def self.setup
-      token = ENV["EN_DEV_TOKEN"]
+      token = ENV.fetch("EN_DEV_TOKEN", nil)
       url = ENV.fetch("EN_NOTESTORE_URL", nil)
       env = ENV.fetch("ENV", nil)
       # env ||= "development"

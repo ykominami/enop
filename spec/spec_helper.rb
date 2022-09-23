@@ -1,5 +1,5 @@
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require 'enop'
+$LOAD_PATH.unshift File.expand_path("../lib", __dir__)
+require "enop"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -23,10 +23,10 @@ class TestSetup
     end
     hash["env"] = env if env
     enop = Enop::Enop.new(
-                          token,
-                          url,
-                          hash,
-                          )
+      token,
+      url,
+      hash
+    )
     enop.connect
     enop
   end
