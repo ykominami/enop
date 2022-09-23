@@ -14,17 +14,17 @@ jobs:
     strategy:
       matrix:
         ruby:
-          - 2.6
+          - 2.7
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true
-    - name: Run the default task
-      env:
-        EVERNOTE_DEVELOPER_TOKEN: ${{ secrets.EVERNOTE_DEVELOPER_TOKEN }}
-        EVERNOTE_NOTESTORE_URL: ${{ secrets.EVERNOTE_NOTESTORE_URL }}
-      run: bundle exec rake
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - name: Run the default task
+        env:
+          EVERNOTE_DEVELOPER_TOKEN: ${{ secrets.EVERNOTE_DEVELOPER_TOKEN }}
+          EVERNOTE_NOTESTORE_URL: ${{ secrets.EVERNOTE_NOTESTORE_URL }}
+        run: bundle exec rake
