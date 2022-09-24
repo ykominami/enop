@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "arxutils_sqlite3"
 
 module Enop

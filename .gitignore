@@ -10,7 +10,6 @@
 /ennblist*.csv
 /ennblist*.txt
 /*.bat
-/config/
 /db/
 /.*#
 /.gitignore
@@ -18,7 +17,6 @@
 /*~
 /archive
 /vendor
-output/
 x.csv
 /lib/enop/dbutil/dbrelation.rb
 /.vscode

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "evernote-thrift"
 require "csv"
 require "pp"
@@ -50,7 +52,7 @@ module Enop
       config = Arxutils_Sqlite3::Config.new
       register_time = Arxutils_Sqlite3::Dbutil::Dbconnect.db_connect(config, dbconfig, env)
       # 保存用DBマネージャ
-      @dbmgr = ::Enop::Dbutil::EnopMgr.new(register_time)
+      @dbmgr = Dbutil::EnopMgr.new(register_time)
 
       set_output_dest(hash["output_dir"], output_filename_base)
     end
@@ -135,7 +137,7 @@ module Enop
     # 文字列で指定したノートブックに含まれるノートのタイトルとソースのURLの配列取得
     def get_url_from_notebook(name)
       # Evernoteノートブック配列
-      get_notebooks
+      retrieve_notebooks
 
       filter = Evernote::EDAM::NoteStore::NoteFilter.new
 
@@ -158,7 +160,7 @@ module Enop
       array_of_array.flatten(1)
     end
 
-    def get_notebooks_hs
+    def retrieve_notebooks_hs
       if @notebooks_hs.size.zero?
         @notebooks_hs = notebooks_from_remote
         # Evernoteノートブック配列
@@ -169,13 +171,13 @@ module Enop
       @notebooks_hs
     end
 
-    def get_notebooks_hs_from_backup
-      get_notebooks_hs if @notebooks_hs.size.zero?
+    def retrieve_notebooks_hs_from_backup
+      retrieve_notebooks_hs if @notebooks_hs.size.zero?
       @notebooks_hs
     end
 
     def get_all_notebooks_hs(from_backup: true)
-      from_backup ? get_notebooks_hs_from_backup : get_notebooks_hs
+      from_backup ? retrieve_notebooks_hs_from_backup : retrieve_notebooks_hs
     end
 
     def output_in_json(obj)
@@ -259,7 +261,6 @@ module Enop
 
     def list_note_having_pdf(from_backup: false)
       get_notes_having_pdf(from_backup)
-      filter = make_filter("resource:application/pdf")
       # pp "@notelist.size=#{@notelist.size}"
       # pp "===="
       stacks = @notelist.each_with_object({}) do |note, stack|
@@ -294,7 +295,7 @@ module Enop
 
     def get_stack_notebooks(from_backup: true)
       notebooks_hs = get_all_notebooks_hs(from_backup: from_backup)
-      memox = notebooks_hs.keys.each_with_object({}) do |guid, memo|
+      notebooks_hs.keys.each_with_object({}) do |guid, memo|
         nb = notebooks_hs[guid]
         stack = nb.stack
         stack ||= ""
@@ -313,7 +314,7 @@ module Enop
       memox.keys.sort.map do |slack|
         # puts "slack=#{slack}"
         memox[slack].keys.sort.map do |nb_name|
-          item = memox[slack][nb_name]
+          memox[slack][nb_name]
           # puts " #{nb_name} #{item.guid}"
         end
       end
@@ -324,7 +325,6 @@ module Enop
       ary = []
       head = 0
       unit = 100
-      notelists = []
       i = head
       our_note_list = @note_store.findNotesMetadata(@authToken, filter, i, unit, spec)
       ary << our_note_list

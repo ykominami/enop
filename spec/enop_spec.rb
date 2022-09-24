@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 RSpec.describe Enop do
@@ -11,22 +13,21 @@ RSpec.describe Enop do
   end
 
   it "Enop get from local", cmd: :local do
-    remote = false
     env ||= "production"
     enop = TestSetup.setup(token, url, env)
-    ret = enop.list_notebooks(from_backup: remote)
-
-    expect(ret).not_to be_nil
+    ret = enop.list_notebooks(from_backup: false)
+    # p "ret.size=#{ret.size}"
+    expect(!ret.empty?).to be_truthy
     #    expect(ret).to eq(true)
   end
 
   it "Enop get from remote", cmd: :remote do
-    remote = true
     env ||= "production"
     enop = TestSetup.setup(token, url, env)
-    ret = enop.list_notebooks(from_backup: remote)
+    ret = enop.list_notebooks(from_backup: true)
+    # p "ret.size=#{ret.size}"
 
-    expect(ret).not_to be_nil
+    expect(!ret.empty?).to be_truthy
     #    expect(ret).to eq(true)
   end
 end
