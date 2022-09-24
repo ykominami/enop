@@ -25,6 +25,8 @@ jobs:
         bundler-cache: true
     - name: Run the default task
       env:
-        EVERNOTE_DEVELOPER_TOKEN: ${{ secrets.EVERNOTE_DEVELOPER_TOKEN }}
-        EVERNOTE_NOTESTORE_URL: ${{ secrets.EVERNOTE_NOTESTORE_URL }}
+        EN_DEV_TOKEN: ${{ secrets.EN_DEV_TOKEN }}
+        EN_NOTESTORE_URL: ${{ secrets.EN_NOTESTORE_URL }}
+        EN_OAUTH_CONSUMER_KEY: ${{ secrets.EN_OAUTH_CONSUMER_KEY }}
+        EN_OAUTH_CONSUMER_SECRET: ${{ secrets.EN_OAUTH_CONSUMER_SECRET }}
       run: bundle exec rake
