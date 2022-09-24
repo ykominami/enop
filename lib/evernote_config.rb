@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Load libraries required by the Evernote OAuth sample applications
 require "oauth"
 require "oauth/consumer"

@@ -1,7 +1,14 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
 
 # Specify your gem's dependencies in enop.gemspec
 gemspec
+
+group :development do
+  gem "yard"
+end
+
 gem "arxutils_sqlite3"
 gem "evernote_oauth"
 gem "ykxutils"
@@ -14,7 +21,3 @@ gem "rspec", "~> 3.0"
 gem "rubocop", "~> 1.7"
 gem "rubocop-rake"
 gem "rubocop-rspec"
-
-group :development do
-  gem "yard"
-end
