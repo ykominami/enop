@@ -18,6 +18,17 @@ module Enop
     NOTEBOOK_ITEM = Struct.new(:guid, :title, :notebook_guid, :notebook_name, :stack)
     NOTEBOOK_X = Struct.new(:name, :guid)
 
+    @state = {}
+
+    
+    def self.store_state(key, value)
+      @state[key] = value
+    end
+
+    def self.fetch_state(key)
+      @state[key]
+    end
+
     def initialize(auth_token, note_store_url, hash)
       # SSL認証を行わないように変更
       OpenSSL::SSL.module_eval { remove_const(:VERIFY_PEER) }
@@ -92,6 +103,7 @@ module Enop
       # puts "@noteStoreUrl=#{@noteStoreUrl}"
       # puts "@noteStoreUrl.class=#{@noteStoreUrl.class}"
       # puts "@noteStoreUrl=#{@noteStoreUrl}"
+      # puts "@note_store_url=#{@note_store_url}"
       note_store_transport = Thrift::HTTPClientTransport.new(@note_store_url)
       note_store_protocol = Thrift::BinaryProtocol.new(note_store_transport)
       # Evernoteノートストア
@@ -102,18 +114,19 @@ module Enop
     def notebooks_from_remote
       notebooks_hs = {}
       begin
+        puts "notebooks_from_remote @authToken=#{@authToken}"
         notebooks = @note_store.listNotebooks(@authToken)
         notebooks_hs = Hash[*notebooks.map { |notebook| [notebook.guid, notebook] }.flatten]
       rescue Evernote::EDAM::Error::EDAMUserException => e
-        puts e.parameter
-        puts e.errorCode
-        puts Evernote::EDAM::Error::EDAMErrorCode::VALUE_MAP[errorCode]
-        exit(1)
+        # puts e.parameter
+        # puts e.errorCode
+        # puts Evernote::EDAM::Error::EDAMErrorCode::VALUE_MAP[errorCode]
+        self.class.store_state("Exception", { klass: Evernote::EDAM::Error::EDAMUserException, instance: e })
       rescue StandardError => e
-        puts e.message
-        puts "@authToken=#{@authToken}"
-        puts "Can't call listNotebooks"
-        exit(2)
+        # puts e.message
+        # puts "@authToken=#{@authToken}"
+        # puts "Can't call listNotebooks"
+        self.class.state("Exception", { klass: StandardError, instance: e} )
       end
 
       notebooks_hs

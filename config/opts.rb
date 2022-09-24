@@ -1,6 +1,6 @@
 @opts = {
   acrecord: {
-    module: %w[Enop Dbutil],
+    module: %w[Xenop Dbutil],
     filename: "dbacrecord.rb",
     dir: "lib"
   }

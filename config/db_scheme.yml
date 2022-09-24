@@ -11,8 +11,8 @@
   :ar_version: 6.0
 - :flist:
     - noitem
-  :classname: Evnb
-  :classname_downcase: evnb
+  :classname: Xenop
+  :classname_downcase: xenop 
   :items:
     - - time_id
       - integer
@@ -20,14 +20,14 @@
     - - ennb_id
       - integer
       - 'false'
-  :plural: evnbs
+  :plural: xenops
   :ar_version: 6.0
 - :flist:
     - noitem
     - invalid
     - current
-  :classname: Ennblist
-  :classname_downcase: ennblist
+  :classname: Xenoplist
+  :classname_downcase: xenoplist
   :items:
     - - stack
       - string
@@ -44,5 +44,5 @@
     - - start_datetime
       - datetime
       - 'false'
-  :plural: ennblists
+  :plural: xenoplists
   :ar_version: 6.0
