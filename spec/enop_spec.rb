@@ -19,8 +19,8 @@ RSpec.describe Enop do
     ret = enop.list_notebooks(from_backup: false)
     ex = enop.class.fetch_state("Exception")
     exc = ex[:instance]
-    # puts "exc.message="
-    # puts exc.message
+    puts "exc.message="
+    puts exc.message
     # puts "exc.parameter="
     # puts exc.parameter
     # puts "exc.errorCode="
