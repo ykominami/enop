@@ -3,13 +3,7 @@ PATH
   specs:
     enop (0.1.7)
       arxutils_sqlite3
-      bundler
       evernote_oauth
-      rake
-      rspec
-      rubocop
-      rubocop-rake
-      rubocop-rspec
       ykutils
       ykxutils
 
@@ -122,6 +116,7 @@ PLATFORMS
 
 DEPENDENCIES
   arxutils_sqlite3
+  bundler
   enop!
   evernote_oauth
   rake (~> 13.0)
