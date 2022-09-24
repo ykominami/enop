@@ -10,7 +10,6 @@
 /ennblist*.csv
 /ennblist*.txt
 /*.bat
-/db/
 /.*#
 /.gitignore
 /OLD-DATA
