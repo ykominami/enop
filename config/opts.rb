@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 @opts = {
   acrecord: {
     module: %w[Enop Dbutil],

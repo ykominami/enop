@@ -20,7 +20,6 @@ module Enop
 
     @state = {}
 
-    
     def self.store_state(key, value)
       @state[key] = value
     end
@@ -126,7 +125,7 @@ module Enop
         # puts e.message
         # puts "@authToken=#{@authToken}"
         # puts "Can't call listNotebooks"
-        self.class.state("Exception", { klass: StandardError, instance: e} )
+        self.class.state("Exception", { klass: StandardError, instance: e })
       end
 
       notebooks_hs

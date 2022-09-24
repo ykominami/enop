@@ -27,10 +27,10 @@ RSpec.describe Enop do
     # puts exc.errorCode
 
     # p "ret.size=#{ret.size}"
-    aggregate_failures '' do
+    aggregate_failures "" do
       # expect( enop.class.fetch_state("Exception") ).to eq(nil)
       # expect(!ret.empty?).to be_truthy
-      expect(ret).to_not be_nil
+      expect(ret).not_to be_nil
     end
   end
 
@@ -39,11 +39,11 @@ RSpec.describe Enop do
     enop = TestSetup.setup(token, url, env)
     ret = enop.list_notebooks(from_backup: true)
 
-    aggregate_failures '' do
+    aggregate_failures "" do
       # expect( enop.class.fetch_state("Exception") ).to eq(nil)
       # p "ret.size=#{ret.size}"
       # expect(!ret.empty?).to be_truthy
-      expect(ret).to_not be_nil
+      expect(ret).not_to be_nil
     end
     #    expect(ret).to eq(true)
   end

@@ -29,7 +29,7 @@ RuboCop::RakeTask.new
 # task default: :test
 
 desc "Evernote related operaion"
-task default: %i[arx:bootstrap spec rubocop]
+task default: %i[arx:arxutils_sqlite3 spec rubocop]
 
 desc "Evernote related operaion"
 task defa: %i[spec rubocop]

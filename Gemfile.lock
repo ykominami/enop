@@ -21,7 +21,7 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
-    arxutils_sqlite3 (0.1.55)
+    arxutils_sqlite3 (0.1.56)
       activerecord (~> 6.1)
       activesupport
       simpleoptparse
