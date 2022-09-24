@@ -1,49 +1,48 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
-require 'enop'
-require 'simpleoptparse'
-require 'pstore'
+require "enop"
+require "pstore"
 require "ykxutils"
 require "arxutils_sqlite3"
 
 token, url, hash = Enop::Cli.setup
 enop = Enop::Enop.new(
-                      token,
-                      url,
-                      hash,
-                      )
+  token,
+  url,
+  hash
+)
+
 enop.connect
 
-list = enop.list_notebooks(true)
-#puts list.size
-#puts "==="
-#list.map { |x| puts x.size }
-#enop.getLatest100Notes
+# local = true
+local = false
 
-#enop.get_notes_having_pdf
-#p enop.notebooks_hs_backup.size
-#enop.get_notes_having_pdf
-=begin
-enop.get_notes_having_pdf(true).map{|x|
-  if x.instance_of?(Array)
-    p x.title
-  end
-}
-=end
-#p enop.notebooks_hs_notelist_backup.size
-=begin
-p enop.notebooks_hs_notelist_backup.map{ |x|
-  x.map{|y|
-   # puts y.class
-   if y.instance_of?(Hash)
-    puts y.keys
-   elsif y.instance_of?(Symbol)
-    puts y
-   end
-  }
-}
-=end
-#enop.list_note_having_pdf(true)
-#enop.list_note_having_pdf
-#enop.list_notebooks(true)
-#enop.list_notebooks_having_pdf(true)
+list = enop.list_notebooks(local)
+# puts list.size
+list.map { |x| puts x.size }
+enop.latest_100_notes
+
+enop.get_notes_having_pdf
+# p enop.notebooks_hs_backup.size
+# enop.get_notes_having_pdf
+# enop.get_notes_having_pdf(true).map{|x|
+#   if x.instance_of?(Array)
+#     p x.title
+#   end
+# }
+# p enop.notebooks_hs_notelist_backup.size
+# p enop.notebooks_hs_notelist_backup.map{ |x|
+#   x.map{|y|
+#    # puts y.class
+#    if y.instance_of?(Hash)
+#     puts y.keys
+#    elsif y.instance_of?(Symbol)
+#     puts y
+#    end
+#   }
+# }
+# enop.list_note_having_pdf(true)
+# enop.list_note_having_pdf
+# enop.list_notebooks(true)
+# enop.list_notebooks_having_pdf(true)

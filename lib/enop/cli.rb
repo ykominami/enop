@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "arxutils_sqlite3"
 
 module Enop
@@ -10,19 +12,8 @@ module Enop
     end
 
     def self.setup
-      token = ENV.fetch("EVERNOTE_DEVELOPER_TOKEN", nil)
-      url = ENV.fetch("EVERNOTE_NOTESTORE_URL", nil)
-
-      # show_token_url(config, token, url)
-
-      if token.nil?
-        auth_yml = File.join(Arxutils_Sqlite3::Config::CONFIG_DIR, "auth", "auth.yml")
-        # p auth_yml
-        config = Ykxutils.yaml_load_file_compati(auth_yml)
-        token = config["token"]
-        url = config["url"]
-      end
-
+      token = ENV.fetch("EN_DEV_TOKEN", nil)
+      url = ENV.fetch("EN_NOTESTORE_URL", nil)
       env = ENV.fetch("ENV", nil)
       # env ||= "development"
       env ||= "production"

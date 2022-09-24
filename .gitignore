@@ -10,15 +10,12 @@
 /ennblist*.csv
 /ennblist*.txt
 /*.bat
-/config/
-/db/
 /.*#
 /.gitignore
 /OLD-DATA
 /*~
 /archive
 /vendor
-output/
 x.csv
 /lib/enop/dbutil/dbrelation.rb
 /.vscode

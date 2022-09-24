@@ -1,5 +1,7 @@
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require 'enop'
+# frozen_string_literal: true
+
+$LOAD_PATH.unshift File.expand_path("../lib", __dir__)
+require "enop"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -16,16 +18,17 @@ end
 class TestSetup
   def self.setup(token, url, env)
     token_x, url_x, hash = Enop::Cli.setup
+    # puts "token_x=", token_x
     unless token
       token = token_x
       url = url_x
     end
     hash["env"] = env if env
     enop = Enop::Enop.new(
-                          token,
-                          url,
-                          hash,
-                          )
+      token,
+      url,
+      hash
+    )
     enop.connect
     enop
   end
