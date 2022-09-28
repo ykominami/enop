@@ -22,12 +22,12 @@ RSpec.describe Enop do
       exc = ex[:instance]
       puts "exc.message="
       puts exc.message
-    # puts "exc.parameter="
-    # puts exc.parameter
-    # puts "exc.errorCode="
-    # puts exc.errorCode
+      # puts "exc.parameter="
+      # puts exc.parameter
+      # puts "exc.errorCode="
+      # puts exc.errorCode
 
-    # p "ret.size=#{ret.size}"
+      # p "ret.size=#{ret.size}"
     end
     aggregate_failures "" do
       # expect( enop.class.fetch_state("Exception") ).to eq(nil)
