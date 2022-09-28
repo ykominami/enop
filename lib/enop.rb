@@ -10,4 +10,8 @@ require_relative "enop/cli"
 
 # Evernote操作用モジュール
 module Enop
+  OUTPUT_DIR = "output"
+  # PSTORE_DIR = "pstore"
+  PSTORE_DIR = "pstore_2"
+  PSTORE_KEY = :TOP
 end

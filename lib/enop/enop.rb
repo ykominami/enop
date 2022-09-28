@@ -55,6 +55,7 @@ module Enop
       # 認証トークン
       @auth_token = auth_token
 
+      # puts "Enop.initialize @auth_token=#{@auth_token}"
       # db_dir = hs["db_dir"]
       # config_dir = hs["config_dir"]
       env = hash["env"]
@@ -98,7 +99,7 @@ module Enop
       # When your application authenticates using OAuth, the NoteStore URL will
       # be returned along with the auth token in the final OAuth request.
       # In that case, you don't need to make this call.
-      # noteStoreUrl = userStore.getNoteStoreUrl(authToken)
+      # noteStoreUrl = userStore.getNoteStoreUrl(auth_token)
       # puts "@noteStoreUrl=#{@noteStoreUrl}"
       # puts "@noteStoreUrl.class=#{@noteStoreUrl.class}"
       # puts "@noteStoreUrl=#{@noteStoreUrl}"
@@ -113,8 +114,8 @@ module Enop
     def notebooks_from_remote
       notebooks_hs = {}
       begin
-        puts "notebooks_from_remote @authToken=#{@authToken}"
-        notebooks = @note_store.listNotebooks(@authToken)
+        puts "notebooks_from_remote @auth_token=#{@auth_token}"
+        notebooks = @note_store.listNotebooks(@auth_token)
         notebooks_hs = Hash[*notebooks.map { |notebook| [notebook.guid, notebook] }.flatten]
       rescue Evernote::EDAM::Error::EDAMUserException => e
         # puts e.parameter
@@ -123,7 +124,7 @@ module Enop
         self.class.store_state("Exception", { klass: Evernote::EDAM::Error::EDAMUserException, instance: e })
       rescue StandardError => e
         # puts e.message
-        # puts "@authToken=#{@authToken}"
+        # puts "@auth_token=#{@auth_token}"
         # puts "Can't call listNotebooks"
         self.class.state("Exception", { klass: StandardError, instance: e })
       end
@@ -137,7 +138,7 @@ module Enop
       filter.notebookGuid = notebookguid
       ret = nil
       begin
-        ret = @note_store.findNoteCounts(@authToken, filter, false)
+        ret = @note_store.findNoteCounts(@auth_token, filter, false)
       rescue StandardError => e
         puts e.message
         puts "Can't call findNoteCounts with #{notebookguid}"
@@ -166,7 +167,7 @@ module Enop
       count_unit = 100
       count = 0
       count.step(notebook_counts, count_unit) do |cnt|
-        our_note_list = @note_store.findNotesMetadata(@authToken, filter, cnt, count_unit, spec)
+        our_note_list = @note_store.findNotesMetadata(@auth_token, filter, cnt, count_unit, spec)
         array_of_array << our_note_list.notes.map { |x| [x.title, x.attributes.sourceURL] }
       end
       array_of_array.flatten(1)
@@ -215,7 +216,7 @@ module Enop
       head.step(tail, unit) do |i|
         limit = i + unit - 1
         limit = tail if limit >= tail
-        our_note_list = @note_store.findNotesMetadata(@authToken, filter, i, limit, spec)
+        our_note_list = @note_store.findNotesMetadata(@auth_token, filter, i, limit, spec)
         ary << our_note_list
       end
       ary
@@ -244,7 +245,7 @@ module Enop
       ary = get_notes_having_pdf_sub(filter, spec, head, unit)
       next_head = head + unit
       # total =  our_note_list.total_notes
-      total = ary[0].total_notes
+      total = ary[0].totalNotes
       notelists << ary[0].notes
       ary = get_notes_having_pdf_sub(filter, spec, next_head, unit, total)
       notelists << ary.map(&:notes)
@@ -257,7 +258,7 @@ module Enop
     end
 
     def get_notes_having_pdf(from_backup: false)
-      get_all_notebooks_hs(from_backup)
+      get_all_notebooks_hs(from_backup: from_backup)
 
       notes_having_pdf_from_remote unless from_backup
 
@@ -338,13 +339,13 @@ module Enop
       head = 0
       unit = 100
       i = head
-      our_note_list = @note_store.findNotesMetadata(@authToken, filter, i, unit, spec)
+      our_note_list = @note_store.findNotesMetadata(@auth_token, filter, i, unit, spec)
       ary << our_note_list
       total_notes = our_note_list.totalNotes
       i += our_note_list.notes.size
       while i < total_notes
         # puts "#{i}/#{total_notes}"
-        our_note_list = @note_store.findNotesMetadata(@authToken, filter, i, unit, spec)
+        our_note_list = @note_store.findNotesMetadata(@auth_token, filter, i, unit, spec)
         ary << our_note_list
         break if our_note_list.notes.size.zero?
 
@@ -395,7 +396,7 @@ module Enop
     end
 
     def latest_100_notes(from_backup: false)
-      notebooks_hs = get_all_notebooks_hs(from_backup)
+      notebooks_hs = get_all_notebooks_hs(from_backup: from_backup)
 
       filter = Evernote::EDAM::NoteStore::NoteFilter.new
       filter.ascending = false
@@ -414,7 +415,16 @@ module Enop
       head = 0
       unit = 10
       tail = head + unit
-      our_note_list = @note_store.findNotesMetadata(@authToken, filter, head, tail, spec)
+      begin
+        puts "@auth_token=#{@auth_token}"
+        puts "filter=#{filter}"
+        puts "head=#{head}"
+        puts "tail=#{tail}"
+        puts "spec=#{spec}"
+        our_note_list = @note_store.findNotesMetadata(@auth_token, filter, head, tail, spec)
+      rescue StandardError => e
+        puts e.message
+      end
       hs = { notebooks_hs: notebooks_hs, notelist: our_note_list }
       output_in_json(hs)
       @pstorex.store(:notebooks_hs_notelist, hs)

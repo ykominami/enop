@@ -18,15 +18,17 @@ RSpec.describe Enop do
     enop = TestSetup.setup(token, url, env)
     ret = enop.list_notebooks(from_backup: false)
     ex = enop.class.fetch_state("Exception")
-    exc = ex[:instance]
-    puts "exc.message="
-    puts exc.message
+    if ex
+      exc = ex[:instance]
+      puts "exc.message="
+      puts exc.message
     # puts "exc.parameter="
     # puts exc.parameter
     # puts "exc.errorCode="
     # puts exc.errorCode
 
     # p "ret.size=#{ret.size}"
+    end
     aggregate_failures "" do
       # expect( enop.class.fetch_state("Exception") ).to eq(nil)
       # expect(!ret.empty?).to be_truthy
