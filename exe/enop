@@ -7,6 +7,7 @@ require "ykxutils"
 require "arxutils_sqlite3"
 
 token, url, hash = Enop::Cli.setup
+puts "enop token=#{token}"
 enop = Enop::Enop.new(
   token,
   url,
@@ -16,9 +17,9 @@ enop = Enop::Enop.new(
 enop.connect
 
 # local = true
-local = false
+from_backup = false
 
-list = enop.list_notebooks(local)
+list = enop.list_notebooks(from_backup: from_backup)
 # puts list.size
 list.map { |x| puts x.size }
 enop.latest_100_notes

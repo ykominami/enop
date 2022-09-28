@@ -15,6 +15,7 @@ RSpec.configure do |config|
   end
 end
 
+# テスト用のEnopインスタンス作成
 class TestSetup
   def self.setup(token, url, env)
     token_x, url_x, hash = Enop::Cli.setup
