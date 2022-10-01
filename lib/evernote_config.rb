@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 # Load libraries required by the Evernote OAuth sample applications
-require "oauth"
-require "oauth/consumer"
+require 'oauth'
+require 'oauth/consumer'
 
 # Load Thrift & Evernote Ruby libraries
-require "evernote_oauth"
+require 'evernote_oauth'
 
 # Client credentials
 # Fill these in with the consumer key and consumer secret that you obtained

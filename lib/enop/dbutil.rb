@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-require "enop/dbutil/enopmgr"
+require 'enop/dbutil/enopmgr'

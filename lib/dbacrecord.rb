@@ -14,12 +14,12 @@ module Dbutil
   end
 
   class Invalidennblist < ActiveRecord::Base
-    belongs_to :ennblist, foreign_key: "org_id"
-    belongs_to :count, foreign_key: ""
+    belongs_to :ennblist, foreign_key: 'org_id'
+    belongs_to :count, foreign_key: ''
   end
 
   class Currentennblist < ActiveRecord::Base
-    belongs_to :ennblist, foreign_key: "org_id"
+    belongs_to :ennblist, foreign_key: 'org_id'
   end
 
 end

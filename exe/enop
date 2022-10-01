@@ -1,10 +1,10 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require "enop"
-require "pstore"
-require "ykxutils"
-require "arxutils_sqlite3"
+require 'enop'
+require 'pstore'
+require 'ykxutils'
+require 'arxutils_sqlite3'
 
 token, url, hash = Enop::Cli.setup
 puts "enop token=#{token}"
