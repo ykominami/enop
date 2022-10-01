@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require "arxutils_sqlite3/rake_task"
+require 'arxutils_sqlite3/rake_task'
 
-require "bundler/gem_tasks"
-require "rspec/core/rake_task"
+require 'bundler/gem_tasks'
+require 'rspec/core/rake_task'
 
 RSpec::Core::RakeTask.new(:spec)
 
-require "rubocop/rake_task"
+require 'rubocop/rake_task'
 
 RuboCop::RakeTask.new
 
@@ -28,15 +28,15 @@ RuboCop::RakeTask.new
 # desc "Run test"
 # task default: :test
 
-desc "Evernote related operaion"
+desc 'Evernote related operaion'
 task default: %i[arx:arxutils_sqlite3 spec rubocop]
 
-desc "Evernote related operaion"
+desc 'Evernote related operaion'
 task defa: %i[spec rubocop]
 
-desc "Evernote related operaion"
+desc 'Evernote related operaion'
 task :enop do
-  sh "bundle exec ruby exe/enop"
+  sh 'bundle exec ruby exe/enop'
 end
 
 # Defining a task called default that depends on the tasks setup, makeconfig, migrate, and acr.

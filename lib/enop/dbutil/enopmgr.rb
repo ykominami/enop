@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "pp"
-require_relative ""
+require 'pp'
+require_relative ''
 module Enop
   # DB操作用ユーティリティモジュール
   module Dbutil

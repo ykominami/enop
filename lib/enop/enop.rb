@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require "evernote-thrift"
-require "csv"
-require "pp"
-require "openssl"
-require "forwardable"
-require "json"
-require "ykxutils"
+require 'evernote-thrift'
+require 'csv'
+require 'pp'
+require 'openssl'
+require 'forwardable'
+require 'json'
+require 'ykxutils'
 
 # require "enop_sub"
 module Enop
@@ -36,7 +36,7 @@ module Enop
       @notebooks_hs = {}
       @notebooks = []
 
-      @pstorex = Ykxutils::Pstorex.new(hash["output_dir"], "enop.dump")
+      @pstorex = Ykxutils::Pstorex.new(hash['output_dir'], 'enop.dump')
       @pstorex.delete(:notebooks)
       @notebooks_hs_notelist_backup = @pstorex.fetch(:notebooks_hs_notelist, {})
       # hs = { notebooks_hs: @notebooks_hs, notelist: notelist }
@@ -58,14 +58,14 @@ module Enop
       # puts "Enop.initialize @auth_token=#{@auth_token}"
       # db_dir = hs["db_dir"]
       # config_dir = hs["config_dir"]
-      env = hash["env"]
-      dbconfig = hash["dbconfig"]
+      env = hash['env']
+      dbconfig = hash['dbconfig']
       config = Arxutils_Sqlite3::Config.new
       register_time = Arxutils_Sqlite3::Dbutil::Dbconnect.db_connect(config, dbconfig, env)
       # 保存用DBマネージャ
       @dbmgr = Dbutil::EnopMgr.new(register_time)
 
-      set_output_dest(hash["output_dir"], output_filename_base)
+      set_output_dest(hash['output_dir'], output_filename_base)
     end
 
     # 出力先設定
@@ -75,9 +75,9 @@ module Enop
         outfname_txt = "#{outfname}.txt"
         outfname_csv = "#{outfname}.csv"
         # 出力先ファイル
-        @output = File.open(outfname_txt, "w", encoding: "UTF-8")
+        @output = File.open(outfname_txt, 'w', encoding: 'UTF-8')
         # 出力先ファイル(CSV形式)
-        @output_csv = CSV.open(outfname_csv, "w", encoding: "UTF-8")
+        @output_csv = CSV.open(outfname_csv, 'w', encoding: 'UTF-8')
       else
         @output = $stdout
       end
@@ -85,7 +85,7 @@ module Enop
 
     # 出力ファイル名のベース部分作成
     def output_filename_base
-      Time.now.strftime("ennblist-%Y-%m-%d-%H-%M-%S")
+      Time.now.strftime('ennblist-%Y-%m-%d-%H-%M-%S')
     end
 
     # 出力先に文字列出力
@@ -121,12 +121,12 @@ module Enop
         # puts e.parameter
         # puts e.errorCode
         # puts Evernote::EDAM::Error::EDAMErrorCode::VALUE_MAP[errorCode]
-        self.class.store_state("Exception", { klass: Evernote::EDAM::Error::EDAMUserException, instance: e })
+        self.class.store_state('Exception', { klass: Evernote::EDAM::Error::EDAMUserException, instance: e })
       rescue StandardError => e
         # puts e.message
         # puts "@auth_token=#{@auth_token}"
         # puts "Can't call listNotebooks"
-        self.class.state("Exception", { klass: StandardError, instance: e })
+        self.class.state('Exception', { klass: StandardError, instance: e })
       end
 
       notebooks_hs
@@ -225,7 +225,7 @@ module Enop
     def notes_having_pdf_from_remote
       filter = Evernote::EDAM::NoteStore::NoteFilter.new
       filter.ascending = false
-      filter.words = "resource:application/pdf"
+      filter.words = 'resource:application/pdf'
 
       spec = Evernote::EDAM::NoteStore::NotesMetadataResultSpec.new
       spec.includeTitle = true
@@ -284,7 +284,7 @@ module Enop
         item.notebook_guid = note.notebookGuid
         item.notebook_name = @notebooks_hs[note.notebookGuid].name
         item.stack = @notebooks_hs[note.notebookGuid].stack
-        item.stack = "" unless item.stack
+        item.stack = '' unless item.stack
         stack[item.stack] ||= {}
         stack[item.stack][item.notebook_name] ||= []
         stack[item.stack][item.notebook_name] << item
@@ -301,7 +301,7 @@ module Enop
     end
 
     def make_filter_with_notebook_guid(notebook_guid)
-      filter = make_filter("resource:application/pdf")
+      filter = make_filter('resource:application/pdf')
       filter.notebookGuid = notebook_guid
       filter
     end
@@ -311,12 +311,12 @@ module Enop
       notebooks_hs.keys.each_with_object({}) do |guid, memo|
         nb = notebooks_hs[guid]
         stack = nb.stack
-        stack ||= ""
+        stack ||= ''
         memo[stack] ||= {}
         # item = OpenStruct.new
         item = NOTEBOOK_X.new
         item.name = nb.name
-        item.name = "" unless item.name
+        item.name = '' unless item.name
         item.guid = nb.guid
         memo[stack][nb.name] = item
       end
@@ -400,7 +400,7 @@ module Enop
 
       filter = Evernote::EDAM::NoteStore::NoteFilter.new
       filter.ascending = false
-      filter.words = "resource:application/pdf"
+      filter.words = 'resource:application/pdf'
       spec = Evernote::EDAM::NoteStore::NotesMetadataResultSpec.new
       spec.includeTitle = true
       spec.includeCreated = true
