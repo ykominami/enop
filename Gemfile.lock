@@ -2,10 +2,6 @@ PATH
   remote: .
   specs:
     enop (0.1.7)
-      arxutils_sqlite3
-      evernote_oauth
-      ykutils
-      ykxutils
 
 GEM
   remote: https://rubygems.org/
@@ -130,8 +126,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord (~> 6.1.7.6)
-  arxutils_sqlite3 (~> 0.1.59)
-  bundler
+  arxutils_sqlite3
   enop!
   evernote_oauth (~> 0.2.3)
   rake (~> 13.1.0)

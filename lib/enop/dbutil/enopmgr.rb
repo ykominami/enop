@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'pp'
 require_relative ''
 module Enop
   # DB操作用ユーティリティモジュール
@@ -20,7 +19,7 @@ module Enop
         ennblist = @hs_by_notebook[notebook]
         unless ennblist
           cur_ennblist = Dbutil::Currentennblist.where(notebook: notebook).limit(1)
-          if cur_ennblist.size.zero?
+          if cur_ennblist.empty?
             begin
               ennblist = Dbutil::Ennblist.create(stack: stack, notebook: notebook, count: count,
                                                  tag_count: tag_count, 　start_datetime: @register_time)
