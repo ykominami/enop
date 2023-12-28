@@ -2,7 +2,6 @@
 
 require 'evernote-thrift'
 require 'csv'
-require 'pp'
 require 'openssl'
 require 'forwardable'
 require 'json'
@@ -174,7 +173,7 @@ module Enop
     end
 
     def retrieve_notebooks_hs
-      if @notebooks_hs.size.zero?
+      if @notebooks_hs.empty?
         @notebooks_hs = notebooks_from_remote
         # Evernoteノートブック配列
         @notebooks_hs_notelist_backup[:notebooks_hs] = @notebooks_hs
@@ -185,7 +184,7 @@ module Enop
     end
 
     def retrieve_notebooks_hs_from_backup
-      retrieve_notebooks_hs if @notebooks_hs.size.zero?
+      retrieve_notebooks_hs if @notebooks_hs.empty?
       @notebooks_hs
     end
 
@@ -347,7 +346,7 @@ module Enop
         # puts "#{i}/#{total_notes}"
         our_note_list = @note_store.findNotesMetadata(@auth_token, filter, i, unit, spec)
         ary << our_note_list
-        break if our_note_list.notes.size.zero?
+        break if our_note_list.notes.empty?
 
         i += our_note_list.notes.size
       end
