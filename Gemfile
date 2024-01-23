@@ -21,6 +21,6 @@ gem 'rspec', '~> 3.12.0'
 
 gem 'rubocop', '~> 1.60.1'
 gem 'rubocop-rake', '~> 0.6.0'
-gem 'rubocop-rspec', '~> 2.25.0'
+gem 'rubocop-rspec', '~> 2.26.1'
 
 gem 'activerecord', '~> 6.1.7.6'
