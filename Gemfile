@@ -6,7 +6,7 @@ source 'https://rubygems.org'
 gemspec
 
 group :development do
-  gem 'yard', '~> 0.9.34'
+  gem 'yard', '~> 0.9.35'
 end
 
 # gem 'arxutils_sqlite3', "~> 0.1.59"
