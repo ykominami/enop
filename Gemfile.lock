@@ -105,7 +105,7 @@ GEM
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.5.0)
     version_gem (1.1.2)
-    yard (0.9.34)
+    yard (0.9.36)
     ykutils (0.1.7)
       erubi
       filex
@@ -126,7 +126,7 @@ DEPENDENCIES
   rubocop (~> 1.60.1)
   rubocop-rake (~> 0.6.0)
   rubocop-rspec (~> 2.26.1)
-  yard (~> 0.9.34)
+  yard (~> 0.9.36)
   ykutils (~> 0.1.7)
   ykxutils (~> 0.1.7)
 
