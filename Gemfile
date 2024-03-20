@@ -12,7 +12,7 @@ end
 # gem 'arxutils_sqlite3', "~> 0.1.59"
 gem 'arxutils_sqlite3'
 gem 'evernote_oauth', '~> 0.2.3'
-gem 'ykxutils', '~> 0.1.7'
+gem 'ykxutils', '~> 0.1.12'
 
 gem 'ykutils', '~> 0.1.7'
 
