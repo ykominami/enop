@@ -19,7 +19,7 @@ gem 'ykutils', '~> 0.1.7'
 gem 'rake', '~> 13.1.0'
 gem 'rspec', '~> 3.13.0'
 
-gem 'rubocop', '~> 1.62.1'
+gem 'rubocop', '~> 1.63.4'
 gem 'rubocop-rake', '~> 0.6.0'
 gem 'rubocop-rspec', '~> 2.27.1'
 
