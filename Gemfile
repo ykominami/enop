@@ -16,7 +16,7 @@ gem 'ykxutils', '~> 0.1.12'
 
 gem 'ykutils', '~> 0.1.7'
 
-gem 'rake', '~> 13.1.0'
+gem 'rake', '~> 13.2.1'
 gem 'rspec', '~> 3.13.0'
 
 gem 'rubocop', '~> 1.62.1'
