@@ -1,0 +1,48 @@
+---
+- :flist:
+    - noitem
+  :classname: Countdatetime
+  :classname_downcase: countdatetime
+  :items:
+    - - countdatetime
+      - datetime
+      - 'false'
+  :plural: countdatetimes
+  :ar_version: 6.0
+- :flist:
+    - noitem
+  :classname: Xenop
+  :classname_downcase: xenop
+  :items:
+    - - time_id
+      - integer
+      - 'false'
+    - - ennb_id
+      - integer
+      - 'false'
+  :plural: xenops
+  :ar_version: 6.0
+- :flist:
+    - noitem
+    - invalid
+    - current
+  :classname: Xenoplist
+  :classname_downcase: xenoplist
+  :items:
+    - - stack
+      - string
+      - 'false'
+    - - notebook
+      - string
+      - 'false'
+    - - count
+      - integer
+      - 'false'
+    - - tag_count
+      - integer
+      - 'false'
+    - - start_datetime
+      - datetime
+      - 'false'
+  :plural: xenoplists
+  :ar_version: 6.0
