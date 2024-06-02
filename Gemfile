@@ -9,18 +9,25 @@ group :development do
   gem 'yard', '~> 0.9.36'
 end
 
+gem 'activerecord', '~> 6.1.7.6'
 # gem 'arxutils_sqlite3', "~> 0.1.59"
 gem 'arxutils_sqlite3'
-gem 'evernote_oauth', '~> 0.2.3'
-gem 'ykxutils', '~> 0.1.12'
-
+gem 'ykxutils'
 gem 'ykutils', '~> 0.1.7'
 
-gem 'rake', '~> 13.2.1'
-gem 'rspec', '~> 3.13.0'
+gem 'evernote_oauth', '~> 0.2.3'
 
-gem 'rubocop', '~> 1.64.0'
-gem 'rubocop-rake', '~> 0.6.0'
-gem 'rubocop-rspec', '~> 2.29.2'
+group :test, :development, optional: true do
+  # gem 'rake', '~> 13.1.0'
+  gem 'rake'
+  gem 'rspec', '~> 3.12.0'
+  gem 'rubocop'
+  gem 'rubocop-performance'
+  gem 'rubocop-rake', require: false
+  gem 'rubocop-rspec', require: false
+end
 
-gem 'activerecord', '~> 6.1.7.7'
+group :development do
+  gem 'debug', platforms: %i[mri mswin mswin64 mingw x64_mingw]
+  gem 'rufo'
+end
