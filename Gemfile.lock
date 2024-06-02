@@ -6,12 +6,12 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (6.1.7.6)
-      activesupport (= 6.1.7.6)
-    activerecord (6.1.7.6)
-      activemodel (= 6.1.7.6)
-      activesupport (= 6.1.7.6)
-    activesupport (6.1.7.6)
+    activemodel (6.1.7.7)
+      activesupport (= 6.1.7.7)
+    activerecord (6.1.7.7)
+      activemodel (= 6.1.7.7)
+      activesupport (= 6.1.7.7)
+    activesupport (6.1.7.7)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
@@ -25,11 +25,11 @@ GEM
       ykutils
       ykxutils
     ast (2.4.2)
-    concurrent-ruby (1.2.2)
+    concurrent-ruby (1.2.3)
     debug (1.9.1)
       irb (~> 1.10)
       reline (>= 0.3.8)
-    diff-lcs (1.5.0)
+    diff-lcs (1.5.1)
     erubi (1.12.0)
     erubis (2.7.0)
     evernote-thrift (1.25.2)
@@ -40,16 +40,16 @@ GEM
       erubis
       messagex
     hashie (5.0.0)
-    i18n (1.14.1)
+    i18n (1.14.3)
       concurrent-ruby (~> 1.0)
     io-console (0.7.2)
     irb (1.11.2)
       rdoc
       reline (>= 0.4.2)
-    json (2.7.1)
+    json (2.7.2)
     language_server-protocol (3.17.0.3)
     messagex (0.1.5)
-    minitest (5.20.0)
+    minitest (5.22.2)
     oauth (1.1.0)
       oauth-tty (~> 1.0, >= 1.0.1)
       snaky_hash (~> 2.0)
@@ -57,7 +57,7 @@ GEM
     oauth-tty (1.0.5)
       version_gem (~> 1.1, >= 1.1.1)
     parallel (1.24.0)
-    parser (3.3.0.5)
+    parser (3.3.1.0)
       ast (~> 2.4.1)
       racc
     psych (5.1.2)
@@ -79,12 +79,12 @@ GEM
       rspec-support (~> 3.12.0)
     rspec-expectations (3.12.3)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.12.0)
-    rspec-mocks (3.12.6)
+      rspec-support (~> 3.13.0)
+    rspec-mocks (3.13.0)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.12.0)
-    rspec-support (3.12.1)
-    rubocop (1.60.1)
+      rspec-support (~> 3.13.0)
+    rspec-support (3.13.0)
+    rubocop (1.64.0)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
@@ -92,11 +92,11 @@ GEM
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8, < 3.0)
       rexml (>= 3.2.5, < 4.0)
-      rubocop-ast (>= 1.30.0, < 2.0)
+      rubocop-ast (>= 1.31.1, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 3.0)
-    rubocop-ast (1.30.0)
-      parser (>= 3.2.1.0)
+    rubocop-ast (1.31.3)
+      parser (>= 3.3.1.0)
     rubocop-capybara (2.20.0)
       rubocop (~> 1.41)
     rubocop-factory_bot (2.25.1)
@@ -106,10 +106,13 @@ GEM
       rubocop-ast (>= 1.30.0, < 2.0)
     rubocop-rake (0.6.0)
       rubocop (~> 1.0)
-    rubocop-rspec (2.26.1)
+    rubocop-rspec (2.29.2)
       rubocop (~> 1.40)
       rubocop-capybara (~> 2.17)
       rubocop-factory_bot (~> 2.22)
+      rubocop-rspec_rails (~> 2.28)
+    rubocop-rspec_rails (2.28.3)
+      rubocop (~> 1.40)
     ruby-progressbar (1.13.0)
     rufo (0.17.1)
     simpleoptparse (0.1.2)
@@ -123,19 +126,19 @@ GEM
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.5.0)
     version_gem (1.1.2)
-    yard (0.9.34)
+    yard (0.9.36)
     ykutils (0.1.7)
       erubi
       filex
       tilt
-    ykxutils (0.1.7)
-    zeitwerk (2.6.12)
+    ykxutils (0.1.12)
+    zeitwerk (2.6.13)
 
 PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  activerecord (~> 6.1.7.6)
+  activerecord (~> 6.1.7.7)
   arxutils_sqlite3
   debug
   enop!
