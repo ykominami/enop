@@ -57,33 +57,34 @@ GEM
     oauth-tty (1.0.5)
       version_gem (~> 1.1, >= 1.1.1)
     parallel (1.24.0)
-    parser (3.3.1.0)
+    parser (3.3.2.0)
       ast (~> 2.4.1)
       racc
     psych (5.1.2)
       stringio
-    racc (1.7.3)
+    racc (1.8.0)
     rainbow (3.1.1)
     rake (13.1.0)
     rdoc (6.6.2)
       psych (>= 4.0.0)
-    regexp_parser (2.9.0)
+    regexp_parser (2.9.2)
     reline (0.4.2)
       io-console (~> 0.5)
-    rexml (3.2.6)
+    rexml (3.2.8)
+      strscan (>= 3.0.9)
     rspec (3.12.0)
       rspec-core (~> 3.12.0)
       rspec-expectations (~> 3.12.0)
       rspec-mocks (~> 3.12.0)
-    rspec-core (3.12.2)
+    rspec-core (3.12.3)
       rspec-support (~> 3.12.0)
-    rspec-expectations (3.12.3)
+    rspec-expectations (3.12.4)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.13.0)
-    rspec-mocks (3.13.0)
+      rspec-support (~> 3.12.0)
+    rspec-mocks (3.12.7)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.13.0)
-    rspec-support (3.13.0)
+      rspec-support (~> 3.12.0)
+    rspec-support (3.12.2)
     rubocop (1.64.0)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
@@ -101,9 +102,9 @@ GEM
       rubocop (~> 1.41)
     rubocop-factory_bot (2.25.1)
       rubocop (~> 1.41)
-    rubocop-performance (1.20.2)
+    rubocop-performance (1.21.0)
       rubocop (>= 1.48.1, < 2.0)
-      rubocop-ast (>= 1.30.0, < 2.0)
+      rubocop-ast (>= 1.31.1, < 2.0)
     rubocop-rake (0.6.0)
       rubocop (~> 1.0)
     rubocop-rspec (2.29.2)
@@ -121,6 +122,7 @@ GEM
       version_gem (~> 1.1, >= 1.1.1)
     sqlite3 (1.7.2-x86_64-linux)
     stringio (3.1.0)
+    strscan (3.1.0)
     tilt (2.1.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
@@ -138,7 +140,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  activerecord (~> 6.1.7.7)
+  activerecord (~> 6.1.7.6)
   arxutils_sqlite3
   debug
   enop!
@@ -150,7 +152,7 @@ DEPENDENCIES
   rubocop-rake
   rubocop-rspec
   rufo
-  yard (~> 0.9.34)
+  yard (~> 0.9.36)
   ykutils (~> 0.1.7)
   ykxutils
 
