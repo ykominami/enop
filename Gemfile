@@ -10,7 +10,6 @@ group :development do
 end
 
 gem 'activerecord', '~> 6.1.7.6'
-# gem 'arxutils_sqlite3', "~> 0.1.59"
 gem 'arxutils_sqlite3'
 gem 'ykxutils'
 gem 'ykutils', '~> 0.1.7'
@@ -31,3 +30,6 @@ group :development do
   gem 'debug', platforms: %i[mri mswin mswin64 mingw x64_mingw]
   gem 'rufo'
 end
+
+gem 'rexml', '~> 3.2.7'
+
