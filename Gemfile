@@ -31,5 +31,5 @@ group :development do
   gem 'rufo'
 end
 
-gem 'rexml', '~> 3.2.7'
+gem 'rexml', '~> 3.2.9'
 
