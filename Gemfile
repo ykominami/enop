@@ -9,7 +9,7 @@ group :development do
   gem 'yard', '~> 0.9.36'
 end
 
-gem 'activerecord', '~> 6.1.7.6'
+gem 'activerecord', '~> 7.1.3.4'
 gem 'arxutils_sqlite3'
 gem 'ykxutils'
 gem 'ykutils', '~> 0.1.10'
@@ -31,5 +31,5 @@ group :development do
   gem 'rufo'
 end
 
-gem 'rexml', '~> 3.2.7'
+gem 'rexml', '~> 3.2.9'
 
