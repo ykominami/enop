@@ -17,11 +17,9 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
-    arxutils_sqlite3 (0.1.61)
+    arxutils_sqlite3 (0.1.59)
       activerecord (~> 6.1)
       activesupport
-      bundler
-      rake (~> 13.0)
       simpleoptparse
       sqlite3
       ykutils
@@ -38,11 +36,9 @@ GEM
     evernote_oauth (0.2.3)
       evernote-thrift
       oauth (>= 0.4.1)
-    filex (0.1.8)
-      bundler
+    filex (0.1.7)
       erubis
       messagex
-      rake (~> 13.0)
     hashie (5.0.0)
     i18n (1.14.5)
       concurrent-ruby (~> 1.0)
@@ -142,7 +138,7 @@ GEM
     unicode-display_width (2.5.0)
     version_gem (1.1.4)
     yard (0.9.36)
-    ykutils (0.1.7)
+    ykutils (0.1.10)
       erubi
       filex
       tilt
@@ -176,7 +172,7 @@ DEPENDENCIES
   rubocop-rspec
   rufo
   yard (~> 0.9.36)
-  ykutils (~> 0.1.7)
+  ykutils (~> 0.1.10)
   ykxutils
 
 BUNDLED WITH

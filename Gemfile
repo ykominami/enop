@@ -12,7 +12,7 @@ end
 gem 'activerecord', '~> 6.1.7.6'
 gem 'arxutils_sqlite3'
 gem 'ykxutils'
-gem 'ykutils', '~> 0.1.7'
+gem 'ykutils', '~> 0.1.10'
 
 gem 'evernote_oauth', '~> 0.2.3'
 
