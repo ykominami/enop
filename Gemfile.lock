@@ -74,7 +74,7 @@ GEM
     regexp_parser (2.9.2)
     reline (0.5.8)
       io-console (~> 0.5)
-    rexml (3.3.3)
+    rexml (3.3.4)
       strscan
     rspec (3.13.0)
       rspec-core (~> 3.13.0)
@@ -107,7 +107,7 @@ GEM
       rubocop-ast (>= 1.31.1, < 2.0)
     rubocop-rake (0.6.0)
       rubocop (~> 1.0)
-    rubocop-rspec (3.0.3)
+    rubocop-rspec (3.0.4)
       rubocop (~> 1.61)
     ruby-progressbar (1.13.0)
     rufo (0.18.0)
@@ -150,7 +150,7 @@ DEPENDENCIES
   enop!
   evernote_oauth (~> 0.2.3)
   rake
-  rexml (~> 3.3.3)
+  rexml (~> 3.3.4)
   rspec (~> 3.13.0)
   rubocop
   rubocop-performance
