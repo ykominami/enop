@@ -74,8 +74,7 @@ GEM
     regexp_parser (2.9.2)
     reline (0.5.8)
       io-console (~> 0.5)
-    rexml (3.3.6)
-      strscan
+    rexml (3.3.7)
     rspec (3.13.0)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
@@ -114,7 +113,6 @@ GEM
       hashie
       version_gem (~> 1.1, >= 1.1.1)
     stringio (3.1.0)
-    strscan (3.1.0)
     tilt (2.4.0)
     timeout (0.4.1)
     tzinfo (2.0.6)
@@ -149,7 +147,7 @@ DEPENDENCIES
   enop!
   evernote_oauth (~> 0.2.3)
   rake
-  rexml (~> 3.3.6)
+  rexml (~> 3.3.7)
   rspec (~> 3.13.0)
   rubocop
   rubocop-performance
