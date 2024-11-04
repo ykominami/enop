@@ -9,7 +9,7 @@ group :development do
   gem 'yard', '~> 0.9.37'
 end
 
-gem 'activerecord', '~> 7.1.4'
+gem 'activerecord', '~> 7.1.5'
 gem 'arxutils_sqlite3'
 gem 'ykxutils'
 gem 'ykutils', '~> 0.1.10'
