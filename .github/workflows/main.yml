@@ -16,6 +16,9 @@ jobs:
         ruby:
           - 3.0
 
+    env:
+      BUNDLE_WITH: test
+
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby
