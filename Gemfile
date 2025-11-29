@@ -19,7 +19,7 @@ gem 'evernote_oauth', '~> 0.2.3'
 group :test, :development, optional: true do
   # gem 'rake', '~> 13.1.0'
   gem 'rake'
-  gem 'rspec', '~> 3.13.1'
+  gem 'rspec', '~> 3.13.2'
   gem 'rubocop'
   gem 'rubocop-performance'
   gem 'rubocop-rake', require: false
