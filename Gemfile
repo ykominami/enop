@@ -6,7 +6,7 @@ source 'https://rubygems.org'
 gemspec
 
 group :development do
-  gem 'yard', '~> 0.9.38'
+  gem 'yard', '~> 0.9.40'
 end
 
 gem 'activerecord', '~> 7.1.6'

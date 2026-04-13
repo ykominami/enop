@@ -146,7 +146,7 @@ GEM
       unicode-emoji (~> 4.1)
     unicode-emoji (4.2.0)
     version_gem (1.1.4)
-    yard (0.9.38)
+    yard (0.9.40)
     ykutils (0.1.10)
       erubi
       filex
@@ -181,7 +181,7 @@ DEPENDENCIES
   rubocop-rake
   rubocop-rspec
   rufo
-  yard (~> 0.9.38)
+  yard (~> 0.9.40)
   ykutils (~> 0.1.10)
   ykxutils
 
